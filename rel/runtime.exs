@@ -71,3 +71,20 @@ config :discovery_api, DiscoveryApi.Auth.Auth0.Guardian, issuer: System.get_env(
 config :ex_aws,
   region: System.get_env("HOSTED_FILE_REGION")
 
+config :discovery_api, :brook,
+  driver: [
+    module: Brook.Driver.Kafka,
+    init_arg: [
+      endpoints: endpoint,
+      topic: "event-stream",
+      group: "discovery-api-event-stream",
+      config: [
+        begin_offset: :earliest
+      ]
+    ]
+  ],
+  handlers: [DiscoveryApi.EventHandler],
+  storage: [
+    module: Brook.Storage.Redis,
+    init_arg: [redix_args: [host: host], namespace: "discovery-api:view"]
+  ]
