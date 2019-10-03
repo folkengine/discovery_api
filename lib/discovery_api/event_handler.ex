@@ -5,8 +5,6 @@ defmodule DiscoveryApi.EventHandler do
   alias SmartCity.{Dataset, Organization}
   import SmartCity.Event, only: [organization_update: 0]
 
-
-
   def handle_event(%Brook.Event{} = event) do
     IO.inspect(event, label: "Got Event")
     :discard
