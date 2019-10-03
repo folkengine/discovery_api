@@ -1,9 +1,11 @@
 defmodule DiscoveryApi.Stats.CompletenessTest do
   use ExUnit.Case
   use Divo
-  alias SmartCity.{Dataset, Organization}
+
   import SmartCity.TestHelper
-  alias SmartCity.TestDataGenerator, as: TDG
+
+  alias SmartCity.Registry.{Dataset, Organization}
+  alias DiscoveryApi.TestDataGenerator, as: TDG
   alias DiscoveryApi.Data.Persistence
   alias DiscoveryApi.Stats.StatsCalculator
   alias DiscoveryApi.Stats.DataHelper

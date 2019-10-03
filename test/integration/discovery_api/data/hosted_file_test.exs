@@ -1,8 +1,8 @@
 defmodule DiscoveryApi.Data.HostedFileTest do
   use ExUnit.Case
   use Divo, services: [:redis, :presto, :metastore, :postgres, :minio]
-  alias SmartCity.{Dataset, Organization}
-  alias SmartCity.TestDataGenerator, as: TDG
+  alias SmartCity.Registry.{Dataset, Organization}
+  alias DiscoveryApi.TestDataGenerator, as: TDG
 
   require Logger
 

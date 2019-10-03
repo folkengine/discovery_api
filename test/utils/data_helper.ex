@@ -2,7 +2,7 @@ defmodule DiscoveryApi.Stats.DataHelper do
   @moduledoc """
   Helper module to create datasets for tests
   """
-  alias SmartCity.TestDataGenerator, as: TDG
+  alias DiscoveryApi.TestDataGenerator, as: TDG
 
   def create_dataset do
     TDG.create_dataset(%{
