@@ -21,9 +21,11 @@ defmodule DiscoveryApi.Application do
         registry_pubsub(),
         supervisor(DiscoveryApiWeb.Endpoint, []),
         DiscoveryApi.Quantum.Scheduler,
-        ecto_repo()
+        ecto_repo(),
+        {Brook, Application.get_env(:discovery_api, :brook)}
       ]
       |> List.flatten()
+
 
     opts = [strategy: :one_for_one, name: DiscoveryApi.Supervisor]
     Supervisor.start_link(children, opts)
