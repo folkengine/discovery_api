@@ -3,7 +3,7 @@ defmodule DiscoveryApi.Test.Helper do
   Utility functions for tests
   """
   alias DiscoveryApi.Data.Model
-  alias SmartCity.TestDataGenerator, as: TDG
+  alias DiscoveryApi.TestDataGenerator, as: TDG
 
   def sample_model(values \\ %{}) do
     %Model{
@@ -118,7 +118,7 @@ defmodule DiscoveryApi.Test.Helper do
 
     Enum.map(membership, fn {organization_name, members} ->
       organization = make_ldap_organization(organization_name, group)
-      SmartCity.Organization.write(organization)
+      SmartCity.Registry.Organization.write(organization)
 
       Enum.each(members, fn member ->
         username = make_ldap_user(member, people)
@@ -211,7 +211,7 @@ defmodule DiscoveryApiWeb.ConnCase do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
       import DiscoveryApiWeb.Router.Helpers
-      alias SmartCity.TestDataGenerator, as: TDG
+      alias DiscoveryApi.TestDataGenerator, as: TDG
       alias DiscoveryApi.Test.Helper
 
       # The default endpoint for testing

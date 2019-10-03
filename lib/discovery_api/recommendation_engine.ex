@@ -5,7 +5,7 @@ defmodule DiscoveryApi.RecommendationEngine do
 
   @prefix "discovery_api:dataset_recommendations:"
 
-  def save(%SmartCity.Dataset{id: id, technical: %{systemName: systemName, schema: schema}}) do
+  def save(%SmartCity.Registry.Dataset{id: id, technical: %{systemName: systemName, schema: schema}}) do
     case Persistence.persist(@prefix <> id, %{id: id, systemName: systemName, schema: schema_mapper(schema)}) do
       {:ok, _} -> :ok
       error -> error

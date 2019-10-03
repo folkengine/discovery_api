@@ -3,11 +3,11 @@ defmodule DiscoveryApi.Data.Mapper do
   Map data from one thing to another
   """
 
-  alias SmartCity.{Dataset, Organization}
+  alias SmartCity.Registry.{Dataset, Organization}
   alias DiscoveryApi.Data.Model
 
   @doc """
-  Map a `SmartCity.Dataset` to a `DiscoveryApi.Data.Model`
+  Map a `SmartCity.Registry.Dataset` to a `DiscoveryApi.Data.Model`
   """
   def to_data_model(%Dataset{id: id, technical: tech, business: biz}, %Organization{} = organization) do
     %Model{
