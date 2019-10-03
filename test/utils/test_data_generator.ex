@@ -1,4 +1,7 @@
 defmodule DiscoveryApi.TestDataGenerator do
+  @moduledoc """
+  Strategic stopgap maneuver to bridge the gap between SmartCity.Registry structs and the new SmartCity data structs.
+  """
   def create_dataset(term) do
     term
     |> SmartCity.TestDataGenerator.create_dataset()

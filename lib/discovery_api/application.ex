@@ -26,7 +26,6 @@ defmodule DiscoveryApi.Application do
       ]
       |> List.flatten()
 
-
     opts = [strategy: :one_for_one, name: DiscoveryApi.Supervisor]
     Supervisor.start_link(children, opts)
   end
