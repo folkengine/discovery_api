@@ -3,6 +3,8 @@ defmodule DiscoveryApiWeb.MetadataController.DetailTest do
   use Placebo
   alias DiscoveryApi.Test.Helper
   alias DiscoveryApi.Data.Model
+  alias DiscoveryApi.Schemas.Organizations
+  alias DiscoveryApi.Schemas.Organizations.Organization
 
   @dataset_id "123"
 
@@ -33,6 +35,9 @@ defmodule DiscoveryApiWeb.MetadataController.DetailTest do
         Helper.sample_model(%{id: @dataset_id})
         |> Map.put(:schema, schema)
 
+      org = Helper.sample_org(model.organization_id)
+
+      allow(Organizations.get_organization(org.org_id), return: org)
       allow(Model.get(@dataset_id), return: model)
 
       actual = conn |> get("/api/v1/dataset/#{@dataset_id}") |> json_response(200)
@@ -49,11 +54,11 @@ defmodule DiscoveryApiWeb.MetadataController.DetailTest do
                "description" => model.description,
                "keywords" => model.keywords,
                "organization" => %{
-                 "name" => model.organizationDetails.orgName,
-                 "title" => model.organizationDetails.orgTitle,
-                 "image" => model.organizationDetails.logoUrl,
-                 "description" => model.organizationDetails.description,
-                 "homepage" => model.organizationDetails.homepage
+                 "name" => org.name,
+                 "title" => org.title,
+                 "image" => org.logo_url,
+                 "description" => org.description,
+                 "homepage" => org.homepage
                },
                "schema" => expected_schema,
                "sourceType" => model.sourceType,
@@ -100,17 +105,11 @@ defmodule DiscoveryApiWeb.MetadataController.DetailTest do
           private: true,
           lastUpdatedDate: nil,
           queries: 7,
-          downloads: 9,
-          organizationDetails: %{
-            id: "id",
-            orgName: "name",
-            orgTitle: "whatever",
-            description: "description",
-            logoUrl: "logo url",
-            homepage: "homepage",
-            dn: "cn=this_is_a_group,ou=Group"
-          }
+          downloads: 9
         })
+
+      org = Helper.sample_org(model.organization_id, %{ldap_dn: "cn=this_is_a_group,ou=Group"})
+      allow(Organizations.get_organization(org.org_id), return: org)
 
       allow(Model.get(@dataset_id), return: model)
 

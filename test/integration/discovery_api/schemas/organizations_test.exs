@@ -23,7 +23,8 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
         title: "b",
         description: "description",
         homepage: "homepage",
-        logo_url: "logo"
+        logo_url: "logo",
+        ldap_dn: "cn=this_is_a_group,ou=Group"
       }
 
       assert {:ok, saved} = Organizations.create_or_update(@org_id, org)
@@ -36,6 +37,7 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
       assert org.description == actual.description
       assert org.homepage == actual.homepage
       assert org.logo_url == actual.logo_url
+      assert org.ldap_dn == actual.ldap_dn
     end
 
     test "updates an organization" do
@@ -71,7 +73,8 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
         orgTitle: "b",
         description: "description",
         homepage: "homepage",
-        logoUrl: "logo"
+        logoUrl: "logo",
+        dn: "cn=this_is_a_group,ou=Group"
       }
 
       assert {:ok, saved} = Organizations.create_or_update(org)
@@ -84,6 +87,7 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
       assert org.description == actual.description
       assert org.homepage == actual.homepage
       assert org.logoUrl == actual.logo_url
+      assert org.dn == actual.ldap_dn
     end
   end
 

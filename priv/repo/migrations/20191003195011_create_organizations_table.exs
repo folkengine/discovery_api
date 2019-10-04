@@ -9,6 +9,7 @@ defmodule DiscoveryApi.Repo.Migrations.CreateOrganizationTable do
       add :description, :string
       add :homepage, :string
       add :logo_url, :string
+      add :ldap_dn, :string
 
       timestamps()
     end

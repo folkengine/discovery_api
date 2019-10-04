@@ -6,7 +6,7 @@ defmodule DiscoveryApiWeb.OrganizationView do
       org_id: org.org_id,
       name: org.name,
       title: org.title,
-      description:  org.description,
+      description: org.description,
       homepage: org.homepage,
       logo_url: org.logo_url
     }

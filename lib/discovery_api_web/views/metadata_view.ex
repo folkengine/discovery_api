@@ -1,20 +1,21 @@
 defmodule DiscoveryApiWeb.MetadataView do
   use DiscoveryApiWeb, :view
   alias DiscoveryApi.Data.Model
+  alias DiscoveryApi.Schemas.Organizations.Organization
 
   def accepted_formats() do
     ["json"]
   end
 
-  def render("detail.json", %{model: model}) do
-    translate_to_dataset_detail(model)
+  def render("detail.json", %{model: model, org: org}) do
+    translate_to_dataset_detail(model, org)
   end
 
   def render("fetch_schema.json", %{model: %{schema: schema}}) do
     format_schema(schema)
   end
 
-  defp translate_to_dataset_detail(%Model{} = model) do
+  defp translate_to_dataset_detail(%Model{} = model, %Organization{} = org) do
     %{
       name: model.name,
       title: model.title,
@@ -22,11 +23,11 @@ defmodule DiscoveryApiWeb.MetadataView do
       id: model.id,
       keywords: model.keywords,
       organization: %{
-        name: model.organizationDetails.orgName,
-        title: model.organizationDetails.orgTitle,
-        image: model.organizationDetails.logoUrl,
-        description: model.organizationDetails.description,
-        homepage: model.organizationDetails.homepage
+        name: org.name,
+        title: org.title,
+        image: org.logo_url,
+        description: org.description,
+        homepage: org.homepage
       },
       sourceType: model.sourceType,
       sourceFormat: model.sourceFormat,
