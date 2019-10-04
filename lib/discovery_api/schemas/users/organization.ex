@@ -1,4 +1,4 @@
-defmodule DiscoveryApi.Schemas.Users.Organization do
+defmodule DiscoveryApi.Schemas.Organizations.Organization do
   @moduledoc """
   Ecto schema respresentation of the Organization.
   """
@@ -7,11 +7,11 @@ defmodule DiscoveryApi.Schemas.Users.Organization do
 
   schema "organizations" do
     field(:org_id, :string)
-    field(:name, :string)
-    field(:title, :string)
+    field(:orgName, :string)
+    field(:orgTitle, :string)
     field(:description, :string)
     field(:homepage, :string)
-    field(:logo_url, :string)
+    field(:logoUrl, :string)
 
     timestamps()
   end
@@ -19,7 +19,7 @@ defmodule DiscoveryApi.Schemas.Users.Organization do
   @doc false
   def changeset(organization, changes) do
     organization
-    |> cast(changes, [:org_id, :name, :title])
+    |> cast(changes, [:org_id, :orgName, :orgTitle, :description, :homepage, :logoUrl])
 
     # |> validate_required([:org_id])
     # |> unique_constraint(:org_id)
