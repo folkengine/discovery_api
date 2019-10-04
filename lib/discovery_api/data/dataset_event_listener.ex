@@ -14,7 +14,7 @@ defmodule DiscoveryApi.Data.DatasetEventListener do
 
     with {:ok, organization} <- Organization.get(dataset.technical.orgId),
          {:ok, _cached} <- SystemNameCache.put(dataset, organization),
-         model <- Mapper.to_data_model(dataset, organization),
+         model <- Mapper.to_data_model(dataset),
          {:ok, _result} <- Model.save(model) do
       DiscoveryApi.Search.Storage.index(model)
       save_dataset_to_recommendation_engine(dataset)

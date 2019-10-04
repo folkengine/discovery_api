@@ -9,7 +9,7 @@ defmodule DiscoveryApi.Data.Mapper do
   @doc """
   Map a `SmartCity.Registry.Dataset` to a `DiscoveryApi.Data.Model`
   """
-  def to_data_model(%Dataset{id: id, technical: tech, business: biz}, %Organization{} = organization) do
+  def to_data_model(%Dataset{id: id, technical: tech, business: biz}) do
     %Model{
       id: id,
       name: tech.dataName,
@@ -41,15 +41,9 @@ defmodule DiscoveryApi.Data.Mapper do
       language: biz.language,
       referenceUrls: biz.referenceUrls,
       categories: biz.categories,
-      organization: organization.orgTitle,
+      organization_id: tech.orgId,
+      organization: "delete me",
       organizationDetails: %{
-        id: organization.id,
-        orgName: organization.orgName,
-        orgTitle: organization.orgTitle,
-        description: organization.description,
-        logoUrl: organization.logoUrl,
-        homepage: organization.homepage,
-        dn: organization.dn
       }
     }
   end

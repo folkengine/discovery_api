@@ -86,7 +86,7 @@ defmodule DiscoveryApi.Data.DatasetEventListenerTest do
       organization = TDG.create_organization(%{id: dataset.technical.orgId})
       allow Organization.get(organization.id), return: {:ok, organization}
       allow(Model.save(any()), return: {:ok, :success})
-      expected_model = DiscoveryApi.Data.Mapper.to_data_model(dataset, organization)
+      expected_model = DiscoveryApi.Data.Mapper.to_data_model(dataset)
 
       DatasetEventListener.handle_dataset(dataset)
 
