@@ -2,15 +2,13 @@ defmodule DiscoveryApi.EventHandler do
   @moduledoc "Event Handler for event stream"
   use Brook.Event.Handler
   require Logger
-  alias SmartCity.{Dataset, Organization}
   import SmartCity.Event, only: [organization_update: 0]
+  alias SmartCity.Organization
+  alias DiscoveryApi.Schemas.Organizations
 
-  def handle_event(%Brook.Event{} = event) do
-    IO.inspect(event, label: "Got Event")
+  def handle_event(%Brook.Event{type: organization_update(), data: %Organization{} = data}) do
+    Organizations.create_or_update(data)
     :discard
   end
 
-  # def handle_event(%Brook.Event{type: organization_update(), data: %Organization{} = data}) do
-  #   {:merge, :org, data.id, data}
-  # end
 end
