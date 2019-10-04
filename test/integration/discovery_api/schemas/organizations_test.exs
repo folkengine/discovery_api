@@ -39,7 +39,6 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
     end
 
     test "updates an organization" do
-
       assert {:ok, created} = Organizations.create_or_update(@org_id, %{name: "a", title: "b"})
       assert {:ok, updated} = Organizations.create_or_update(@org_id, %{name: "c", title: "d"})
 
@@ -50,7 +49,6 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
     end
 
     test "returns an error when name is not provided" do
-
       assert {:error, changeset} = Organizations.create_or_update(@org_id, %{title: "title"})
 
       assert changeset.errors |> Keyword.has_key?(:name)
@@ -58,7 +56,6 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
     end
 
     test "returns an error when title is not provided" do
-
       assert {:error, changeset} = Organizations.create_or_update(@org_id, %{name: "name"})
 
       assert changeset.errors |> Keyword.has_key?(:title)
@@ -68,7 +65,6 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
 
   describe "create_or_update/1" do
     test "creates an organization from a smart city struct" do
-
       org = %SmartCity.Organization{
         id: @org_id,
         orgName: "a",
@@ -88,7 +84,6 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
       assert org.description == actual.description
       assert org.homepage == actual.homepage
       assert org.logoUrl == actual.logo_url
-
     end
   end
 
@@ -97,5 +92,4 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
       assert is_nil(Organizations.get_organization("i do not exist"))
     end
   end
-
 end
