@@ -7,11 +7,11 @@ defmodule DiscoveryApi.Schemas.Organizations.Organization do
 
   schema "organizations" do
     field(:org_id, :string)
-    field(:orgName, :string)
-    field(:orgTitle, :string)
+    field(:name, :string)
+    field(:title, :string)
     field(:description, :string)
     field(:homepage, :string)
-    field(:logoUrl, :string)
+    field(:logo_url, :string)
 
     timestamps()
   end
@@ -19,7 +19,7 @@ defmodule DiscoveryApi.Schemas.Organizations.Organization do
   @doc false
   def changeset(organization, changes) do
     organization
-    |> cast(changes, [:org_id, :orgName, :orgTitle, :description, :homepage, :logoUrl])
+    |> cast(changes, [:org_id, :name, :title, :description, :homepage, :logo_url])
 
     # |> validate_required([:org_id])
     # |> unique_constraint(:org_id)
