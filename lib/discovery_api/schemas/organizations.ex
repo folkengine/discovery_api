@@ -6,15 +6,8 @@ defmodule DiscoveryApi.Schemas.Organizations do
   alias DiscoveryApi.Schemas.Organizations.Organization
 
   def list_organizations do
-    # Repo.all(User)
+    Repo.all(Organization)
   end
-
-  # Why is this needed?
-  # def create(organization_attrs) do
-  # %User{}
-  # |> User.changeset(user_attrs)
-  # |> Repo.insert()
-  # end
 
   def create_or_update(%SmartCity.Organization{} = org) do
     create_or_update(org.id, %{
@@ -36,6 +29,4 @@ defmodule DiscoveryApi.Schemas.Organizations do
   end
 
   def get_organization(org_id), do: Repo.get_by(Organization, org_id: org_id)
-
-
 end

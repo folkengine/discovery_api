@@ -16,12 +16,10 @@ defmodule DiscoveryApi.Schemas.Organizations.Organization do
     timestamps()
   end
 
-  @doc false
   def changeset(organization, changes) do
     organization
     |> cast(changes, [:org_id, :name, :title, :description, :homepage, :logo_url])
-
-    # |> validate_required([:org_id])
-    # |> unique_constraint(:org_id)
+    |> validate_required([:org_id, :name, :title])
+    |> unique_constraint(:org_id)
   end
 end
