@@ -1,7 +1,6 @@
 defmodule DiscoveryApi.Schemas.OrganizationsTest do
   use ExUnit.Case
-  use Divo
-  # use Divo, services: [:redis, :"ecto-postgres"]
+  use Divo, services: [:redis, :"ecto-postgres", :kafka, :zookeeper]
   use DiscoveryApi.DataCase
 
   alias DiscoveryApi.Repo
@@ -12,36 +11,37 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
     test "creates an organization" do
       org_id = "1"
 
-      org = %Organization{
+      org = %{
         org_id: org_id,
-        orgName: "a",
-        orgTitle: "b",
+        name: "a",
+        title: "b",
         description: "description",
         homepage: "homepage",
-        logoUrl: "logo"
+        logo_url: "logo"
       }
 
-      assert {:ok, saved} = Organizations.create_or_update(org_id, Map.from_struct(org))
+      assert {:ok, saved} = Organizations.create_or_update(org_id, org)
 
-      actual = Repo.get(Organization, saved.id)
+      actual = Organizations.get_organization(org_id)
+      assert !is_nil(actual)
       assert org.org_id == actual.org_id
-      assert org.orgName == actual.orgName
-      assert org.orgTitle == actual.orgTitle
+      assert org.name == actual.name
+      assert org.title == actual.title
       assert org.description == actual.description
       assert org.homepage == actual.homepage
-      assert org.logoUrl == actual.logoUrl
+      assert org.logo_url == actual.logo_url
     end
 
     test "updates an organization" do
       org_id = "2"
 
-      assert {:ok, created} = Organizations.create_or_update(org_id, %{orgName: "a", orgTitle: "b"})
-      assert {:ok, updated} = Organizations.create_or_update(org_id, %{orgName: "c", orgTitle: "d"})
+      assert {:ok, created} = Organizations.create_or_update(org_id, %{name: "a", title: "b"})
+      assert {:ok, updated} = Organizations.create_or_update(org_id, %{name: "c", title: "d"})
 
-      actual = Repo.get(Organization, created.id)
-      assert org_id == actual.org_id
-      assert "c" == actual.orgName
-      assert "d" == actual.orgTitle
+      actual = Organizations.get_organization(org_id)
+      assert !is_nil(actual)
+      assert "c" == actual.name
+      assert "d" == actual.title
     end
 
     # test "returns an error when org id is not provided for a new org" do
@@ -54,7 +54,7 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
 
   describe "create_or_update/1" do
     test "creates an organization from a smart city struct" do
-      org_id = "1"
+      org_id = "3"
 
       org = %SmartCity.Organization{
         id: org_id,
@@ -67,7 +67,15 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
 
       assert {:ok, saved} = Organizations.create_or_update(org)
 
-      assert org == Organizations.get_organization(org_id)
+      actual = Organizations.get_organization(org_id)
+      assert !is_nil(actual)
+      assert org.id == actual.org_id
+      assert org.orgName == actual.name
+      assert org.orgTitle == actual.title
+      assert org.description == actual.description
+      assert org.homepage == actual.homepage
+      assert org.logoUrl == actual.logo_url
+
     end
   end
 

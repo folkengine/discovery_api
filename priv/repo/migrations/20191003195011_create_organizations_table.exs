@@ -4,11 +4,11 @@ defmodule DiscoveryApi.Repo.Migrations.CreateOrganizationTable do
   def change do
     create table(:organizations) do
       add :org_id, :string, null: false
-      add :orgName, :string, null: false
-      add :orgTitle, :string, null: false
+      add :name, :string, null: false
+      add :title, :string, null: false
       add :description, :string
       add :homepage, :string
-      add :logoUrl, :string
+      add :logo_url, :string
 
       timestamps()
     end
