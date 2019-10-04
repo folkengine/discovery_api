@@ -39,9 +39,9 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
       assert {:ok, updated} = Organizations.create_or_update(org_id, %{orgName: "c", orgTitle: "d"})
 
       actual = Repo.get(Organization, created.id)
-      assert actual.org_id == org_id
-      assert actual.orgName == "c"
-      assert actual.orgTitle == "d"
+      assert org_id == actual.org_id
+      assert "c" == actual.orgName
+      assert "d" == actual.orgTitle
     end
 
     # test "returns an error when org id is not provided for a new org" do
@@ -52,23 +52,29 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
     # end
   end
 
-  # describe "create_or_update/1" do
-  #   test "creates an organization from a smart city struct" do
-  #     org_id = "1"
+  describe "create_or_update/1" do
+    test "creates an organization from a smart city struct" do
+      org_id = "1"
 
-  #     org = %SmartCity.Organization{
-  #       id: org_id,
-  #       orgName: "a",
-  #       orgTitle: "b",
-  #       description: "description",
-  #       homepage: "homepage",
-  #       logoUrl: "logo"
-  #     }
+      org = %SmartCity.Organization{
+        id: org_id,
+        orgName: "a",
+        orgTitle: "b",
+        description: "description",
+        homepage: "homepage",
+        logoUrl: "logo"
+      }
 
-  #     assert {:ok, saved} = Organizations.create_or_update(org)
+      assert {:ok, saved} = Organizations.create_or_update(org)
 
-  #     assert org == Organizations.get_organization(org_id)
-  #   end
-  # end
+      assert org == Organizations.get_organization(org_id)
+    end
+  end
+
+  describe "get_organization/1" do
+    test "returns a nil when not found" do
+      assert is_nil(Organizations.get_organization("i do not exist"))
+    end
+  end
 
 end
