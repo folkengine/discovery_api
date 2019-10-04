@@ -27,21 +27,12 @@ defmodule DiscoveryApi.Data.DatasetEventListenerTest do
     end
 
     @tag capture_log: true
-    test "should return :ok and log when organization get fails" do
-      dataset = TDG.create_dataset(%{id: "123"})
-
-      allow(Organization.get(dataset.technical.orgId), return: {:error, :failure})
-
-      assert :ok == DatasetEventListener.handle_dataset(dataset)
-    end
-
-    @tag capture_log: true
     test "should return :ok and log when system cache put fails" do
       dataset = TDG.create_dataset(%{id: "123"})
       organization = TDG.create_organization(%{id: dataset.technical.orgId})
 
       allow(Organization.get(dataset.technical.orgId), return: {:ok, organization})
-      allow(SystemNameCache.put(any(), any()), return: {:error, :failure})
+      allow(SystemNameCache.put(any()), return: {:error, :failure})
 
       assert :ok == DatasetEventListener.handle_dataset(dataset)
     end
@@ -63,14 +54,14 @@ defmodule DiscoveryApi.Data.DatasetEventListenerTest do
       organization = TDG.create_organization(%{id: dataset.technical.orgId})
 
       allow(Organization.get(dataset.technical.orgId), return: {:ok, organization})
-      allow(SystemNameCache.put(any(), any()), return: {:ok, :cached})
+      allow(SystemNameCache.put(any()), return: {:ok, :cached})
       allow(Model.save(any()), return: {:error, :failure})
 
       assert :ok == DatasetEventListener.handle_dataset(dataset)
     end
 
     test "creates orgName/dataName mapping to dataset_id" do
-      dataset = TDG.create_dataset(%{id: "123"})
+      dataset = TDG.create_dataset(%{id: "123", technical: %{orgName: "orgName", dataName: "dataName"}})
       organization = TDG.create_organization(%{id: dataset.technical.orgId})
 
       allow Organization.get(organization.id), return: {:ok, organization}
@@ -78,7 +69,7 @@ defmodule DiscoveryApi.Data.DatasetEventListenerTest do
 
       DatasetEventListener.handle_dataset(dataset)
 
-      assert SystemNameCache.get(organization.orgName, dataset.technical.dataName) == "123"
+      assert SystemNameCache.get(dataset.technical.orgName, dataset.technical.dataName) == "123"
     end
 
     test "indexes model for search" do

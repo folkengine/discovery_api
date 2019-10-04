@@ -12,8 +12,7 @@ defmodule DiscoveryApi.Data.DatasetEventListener do
   def handle_dataset(%Dataset{} = dataset) do
     Logger.debug(fn -> "Handling dataset: `#{dataset.technical.systemName}`" end)
 
-    with {:ok, organization} <- Organization.get(dataset.technical.orgId),
-         {:ok, _cached} <- SystemNameCache.put(dataset, organization),
+    with {:ok, _cached} <- SystemNameCache.put(dataset),
          model <- Mapper.to_data_model(dataset),
          {:ok, _result} <- Model.save(model) do
       DiscoveryApi.Search.Storage.index(model)
