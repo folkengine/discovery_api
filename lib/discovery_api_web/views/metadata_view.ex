@@ -1,7 +1,6 @@
 defmodule DiscoveryApiWeb.MetadataView do
   use DiscoveryApiWeb, :view
   alias DiscoveryApi.Data.Model
-  alias DiscoveryApi.Schemas.Organizations.Organization
 
   def accepted_formats() do
     ["json"]
@@ -15,20 +14,13 @@ defmodule DiscoveryApiWeb.MetadataView do
     format_schema(schema)
   end
 
-  defp translate_to_dataset_detail(%Model{} = model, %Organization{} = org) do
+  defp translate_to_dataset_detail(%Model{} = model, org) do
     %{
       name: model.name,
       title: model.title,
       description: model.description,
       id: model.id,
       keywords: model.keywords,
-      organization: %{
-        name: org.name,
-        title: org.title,
-        image: org.logo_url,
-        description: org.description,
-        homepage: org.homepage
-      },
       sourceType: model.sourceType,
       sourceFormat: model.sourceFormat,
       sourceUrl: model.sourceUrl,
@@ -56,7 +48,19 @@ defmodule DiscoveryApiWeb.MetadataView do
       completeness: model.completeness,
       schema: format_schema(model.schema),
       systemName: model.systemName
-    }
+    } |> with_organization(org)
+  end
+
+  defp with_organization(map, nil), do: map
+
+  defp with_organization(map, org) do
+    Map.put(map, :organization, %{
+      name: org.name,
+      title: org.title,
+      image: org.logo_url,
+      description: org.description,
+      homepage: org.homepage
+    })
   end
 
   defp format_schema(schema_fields) do
