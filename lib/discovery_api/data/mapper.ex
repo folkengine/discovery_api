@@ -42,9 +42,6 @@ defmodule DiscoveryApi.Data.Mapper do
       referenceUrls: biz.referenceUrls,
       categories: biz.categories,
       organization_id: tech.orgId,
-      organization: "delete me",
-      organizationDetails: %{
-      }
     }
   end
 
