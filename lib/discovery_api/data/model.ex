@@ -28,6 +28,7 @@ defmodule DiscoveryApi.Data.Model do
     :modifiedDate,
     :name,
     :organization,
+    :organization_id,
     :organizationDetails,
     :parentDataset,
     :private,

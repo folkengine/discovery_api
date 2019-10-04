@@ -10,9 +10,10 @@ defmodule DiscoveryApiWeb.OrganizationControllerTest do
         org_id: "1234",
         name: "Org Name",
         title: "Org Title",
-        description:  nil,
+        description: nil,
         homepage: nil,
-        logo_url: nil
+        logo_url: nil,
+        ldap_dn: "irrelevant"
       }
 
       expected = %{

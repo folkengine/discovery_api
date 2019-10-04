@@ -3,6 +3,7 @@ defmodule DiscoveryApi.Test.Helper do
   Utility functions for tests
   """
   alias DiscoveryApi.Data.Model
+  alias DiscoveryApi.Schemas.Organizations.Organization
   alias DiscoveryApi.TestDataGenerator, as: TDG
 
   def sample_model(values \\ %{}) do
@@ -11,7 +12,7 @@ defmodule DiscoveryApi.Test.Helper do
       title: Faker.Lorem.word(),
       keywords: [Faker.Lorem.word(), Faker.Lorem.word()],
       organization: Faker.Lorem.word(),
-      organizationDetails: %{} |> TDG.create_organization() |> Map.from_struct(),
+      organization_id: Faker.UUID.v4(),
       modifiedDate: Date.to_string(Faker.Date.backward(20)),
       fileTypes: [Faker.Lorem.characters(3), Faker.Lorem.characters(4)],
       description: Enum.join(Faker.Lorem.sentences(2..3), " "),
@@ -59,6 +60,19 @@ defmodule DiscoveryApi.Test.Helper do
         "record_count" => Faker.random_between(1, 1000),
         "fields" => %{"one" => %{"count" => 1, "required" => false}}
       }
+    }
+    |> Map.merge(values)
+  end
+
+  def sample_org(org_id, values \\ %{}) do
+    %Organization{
+      org_id: org_id,
+      name: Faker.Lorem.word(),
+      title: Faker.Lorem.word(),
+      description: Enum.join(Faker.Lorem.sentences(2..3), " "),
+      homepage: Faker.Internet.url(),
+      logo_url: Faker.Internet.url(),
+      ldap_dn: "some_dn"
     }
     |> Map.merge(values)
   end

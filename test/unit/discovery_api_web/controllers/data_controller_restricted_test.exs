@@ -5,6 +5,8 @@ defmodule DiscoveryApiWeb.DataController.RestrictedTest do
   alias DiscoveryApi.Data.{Model, SystemNameCache}
   alias DiscoveryApi.Services.{PrestoService, MetricsService}
   alias DiscoveryApiWeb.Utilities.AuthUtils
+  alias DiscoveryApi.Schemas.Organizations
+  alias DiscoveryApi.Test.Helper
 
   @dataset_id "1234-4567-89101"
   @system_name "foobar__company_data"
@@ -21,15 +23,14 @@ defmodule DiscoveryApiWeb.DataController.RestrictedTest do
         lastUpdatedDate: nil,
         queries: 7,
         downloads: 9,
-        organizationDetails: %{
-          orgName: @org_name,
-          dn: "cn=this_is_a_group,ou=Group"
-        },
         schema: [
           %{name: "id", type: "integer"},
           %{name: "name", type: "string"}
         ]
       })
+
+    org = Helper.sample_org(model.organization_id, %{name: @org_name, ldap_dn: "cn=this_is_a_group,ou=Group"})
+    allow(Organizations.get_organization(org.org_id), return: org)
 
     allow(SystemNameCache.get(@org_name, @data_name), return: @dataset_id)
     allow(Model.get(@dataset_id), return: model)
@@ -108,6 +109,7 @@ defmodule DiscoveryApiWeb.DataController.RestrictedTest do
       allow PaddleWrapper.authenticate(any(), any()), return: :ok
       allow PaddleWrapper.get(filter: [uid: username]), return: {:ok, [ldap_user]}
       allow PaddleWrapper.get(base: [ou: "Group"], filter: [cn: "this_is_a_group"]), return: {:ok, [ldap_group]}
+
 
       {:ok, token, _} = DiscoveryApi.Auth.Guardian.encode_and_sign(username, %{}, token_type: "refresh")
 

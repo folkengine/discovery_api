@@ -12,13 +12,14 @@ defmodule DiscoveryApi.Schemas.Organizations.Organization do
     field(:description, :string)
     field(:homepage, :string)
     field(:logo_url, :string)
+    field(:ldap_dn, :string)
 
     timestamps()
   end
 
   def changeset(organization, changes) do
     organization
-    |> cast(changes, [:org_id, :name, :title, :description, :homepage, :logo_url])
+    |> cast(changes, [:org_id, :name, :title, :description, :homepage, :logo_url, :ldap_dn])
     |> validate_required([:org_id, :name, :title])
     |> unique_constraint(:org_id)
   end

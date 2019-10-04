@@ -15,7 +15,8 @@ defmodule DiscoveryApi.Schemas.Organizations do
       title: org.orgTitle,
       description: org.description,
       homepage: org.homepage,
-      logo_url: org.logoUrl
+      logo_url: org.logoUrl,
+      ldap_dn: org.dn
     })
   end
 
