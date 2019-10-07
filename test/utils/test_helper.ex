@@ -3,6 +3,7 @@ defmodule DiscoveryApi.Test.Helper do
   Utility functions for tests
   """
   alias DiscoveryApi.Data.Model
+  alias DiscoveryApi.Schemas.Organizations
   alias DiscoveryApi.Schemas.Organizations.Organization
   alias DiscoveryApi.TestDataGenerator, as: TDG
 
@@ -132,7 +133,7 @@ defmodule DiscoveryApi.Test.Helper do
 
     Enum.map(membership, fn {organization_name, members} ->
       organization = make_ldap_organization(organization_name, group)
-      SmartCity.Registry.Organization.write(organization)
+      Organizations.create_or_update(organization.org_id, organization |> Map.from_struct())
 
       Enum.each(members, fn member ->
         username = make_ldap_user(member, people)
@@ -157,10 +158,7 @@ defmodule DiscoveryApi.Test.Helper do
   end
 
   def make_ldap_organization(name, ou) do
-    TDG.create_organization(%{
-      dn: "cn=#{name},ou=#{ou}",
-      orgName: name
-    })
+    sample_org(Faker.UUID.v4(), %{name: name, ldap_dn: "cn=#{name},ou=#{ou}"})
   end
 
   def make_ldap_user(name, ou) do

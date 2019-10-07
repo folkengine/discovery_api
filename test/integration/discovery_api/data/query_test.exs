@@ -2,6 +2,7 @@ defmodule DiscoveryApi.Data.QueryTest do
   import ExUnit.CaptureLog
   use ExUnit.Case
   use Divo
+  use DiscoveryApi.DataCase
   alias SmartCity.Registry.Dataset
   alias DiscoveryApi.TestDataGenerator, as: TDG
   alias DiscoveryApi.Test.Helper
@@ -35,10 +36,10 @@ defmodule DiscoveryApi.Data.QueryTest do
         id: @public_dataset_id,
         technical: %{
           private: false,
-          orgId: organization.id,
-          orgName: organization.orgName,
+          orgId: organization.org_id,
+          orgName: organization.name,
           dataName: @public_dataset_name,
-          systemName: "#{organization.orgName}__#{@public_dataset_name}"
+          systemName: "#{organization.name}__#{@public_dataset_name}"
         }
       })
 
@@ -47,10 +48,10 @@ defmodule DiscoveryApi.Data.QueryTest do
         id: @private_dataset_id,
         technical: %{
           private: true,
-          orgId: organization.id,
-          orgName: organization.orgName,
+          orgId: organization.org_id,
+          orgName: organization.name,
           dataName: @private_dataset_name,
-          systemName: "#{organization.orgName}__#{@private_dataset_name}"
+          systemName: "#{organization.name}__#{@private_dataset_name}"
         }
       })
 
@@ -59,10 +60,10 @@ defmodule DiscoveryApi.Data.QueryTest do
         id: "geojson_id",
         technical: %{
           private: false,
-          orgId: organization.id,
-          orgName: organization.orgName,
+          orgId: organization.org_id,
+          orgName: organization.name,
           dataName: "some_geojson",
-          systemName: "#{organization.orgName}__some_geojson"
+          systemName: "#{organization.name}__some_geojson"
         }
       })
 

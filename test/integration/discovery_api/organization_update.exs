@@ -22,8 +22,8 @@ defmodule DiscoveryApi.OrganizationUpdateTest do
     new_org = Jason.decode!(result.body)
 
     assert new_org.id == org.id
-    assert new_org.orgName == org.orgName
-    assert new_org.orgTitle == org.orgTitle
+    assert new_org.name == org.orgName
+    assert new_org.title == org.orgTitle
   end
 
   defp get(url, headers \\ %{}) do
