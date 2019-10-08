@@ -10,5 +10,4 @@ defmodule DiscoveryApi.EventHandler do
     Organizations.create_or_update(data)
     :discard
   end
-
 end

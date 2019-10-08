@@ -41,7 +41,7 @@ defmodule DiscoveryApi.Data.Mapper do
       language: biz.language,
       referenceUrls: biz.referenceUrls,
       categories: biz.categories,
-      organization_id: tech.orgId,
+      organization_id: tech.orgId
     }
   end
 

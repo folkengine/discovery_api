@@ -48,7 +48,8 @@ defmodule DiscoveryApiWeb.MetadataView do
       completeness: model.completeness,
       schema: format_schema(model.schema),
       systemName: model.systemName
-    } |> with_organization(org)
+    }
+    |> with_organization(org)
   end
 
   defp with_organization(map, nil), do: map

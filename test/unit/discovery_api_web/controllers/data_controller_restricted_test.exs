@@ -110,7 +110,6 @@ defmodule DiscoveryApiWeb.DataController.RestrictedTest do
       allow PaddleWrapper.get(filter: [uid: username]), return: {:ok, [ldap_user]}
       allow PaddleWrapper.get(base: [ou: "Group"], filter: [cn: "this_is_a_group"]), return: {:ok, [ldap_group]}
 
-
       {:ok, token, _} = DiscoveryApi.Auth.Guardian.encode_and_sign(username, %{}, token_type: "refresh")
 
       conn

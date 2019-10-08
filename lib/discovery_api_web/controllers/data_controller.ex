@@ -41,7 +41,7 @@ defmodule DiscoveryApiWeb.DataController do
   def fetch_file(conn, _params, possible_extensions) when is_list(possible_extensions) do
     model = conn.assigns.model
     dataset_id = model.id
-    #TODO: what if we don't find an organization
+    # TODO: what if we don't find an organization
     organization = Organizations.get_organization(model.organization_id)
 
     path = "#{organization.name}/#{model.name}"
