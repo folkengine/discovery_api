@@ -53,6 +53,8 @@ defmodule DiscoveryApiWeb.MultipleMetadataController do
   end
 
   def fetch_data_json(conn, _params) do
+    organizations = DiscoveryApi.Schemas.Organizations.list_organizations()
+
     case Model.get_all() |> Enum.filter(&is_public?/1) do
       [] ->
         render_error(conn, 404, "Not Found")
@@ -61,7 +63,7 @@ defmodule DiscoveryApiWeb.MultipleMetadataController do
         render(
           conn,
           :get_data_json,
-          models: result
+          %{models: result, organizations: organizations}
         )
     end
   end

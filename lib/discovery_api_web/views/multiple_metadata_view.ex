@@ -32,19 +32,24 @@ defmodule DiscoveryApiWeb.MultipleMetadataView do
     }
   end
 
-  def render("get_data_json.json", %{models: models}) do
-    translate_to_open_data_schema(models)
+  def render("get_data_json.json", %{models: models, organizations: organizations}) do
+    translate_to_open_data_schema(models, organizations)
   end
 
-  defp translate_to_open_data_schema(models) do
+  defp translate_to_open_data_schema(models, organizations) do
     %{
       conformsTo: "https://project-open-data.cio.gov/v1.1/schema",
       "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
-      dataset: Enum.map(models, &translate_to_open_dataset/1)
+      dataset: Enum.map(models, &translate_to_open_dataset(&1, organizations))
     }
   end
 
-  defp translate_to_open_dataset(%Model{} = model) do
+  defp translate_to_open_dataset(%Model{} = model, organizations) do
+    organization_name =
+      organizations
+      |> Enum.find(fn org -> org.org_id == model.organization_id end)
+      |> Map.get(:name, "")
+
     %{
       "@type" => "dcat:Dataset",
       "identifier" => model.id,
@@ -54,7 +59,7 @@ defmodule DiscoveryApiWeb.MultipleMetadataView do
       "modified" => model.modifiedDate,
       "publisher" => %{
         "@type" => "org:Organization",
-        "name" => model.organization
+        "name" => organization_name
       },
       "contactPoint" => %{
         "@type" => "vcard:Contact",
@@ -104,9 +109,10 @@ defmodule DiscoveryApiWeb.MultipleMetadataView do
   defp val_or_optional(val), do: val
 
   defp translate_to_dataset(%Model{} = model) do
-    #TODO: should this be looked up in the controller?
+    # TODO: should this be looked up in the controller?
     # also what if we don't find an organization?
     organization = Organizations.get_organization(model.organization_id)
+
     %{
       id: model.id,
       name: model.name,
