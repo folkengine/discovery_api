@@ -1,6 +1,6 @@
 defmodule DiscoveryApi.Schemas.UsersTest do
   use ExUnit.Case
-  use Divo, services: [:redis, :"ecto-postgres"]
+  use Divo, services: [:redis, :"ecto-postgres", :kafka, :zookeeper]
   use DiscoveryApi.DataCase
 
   alias DiscoveryApi.Repo

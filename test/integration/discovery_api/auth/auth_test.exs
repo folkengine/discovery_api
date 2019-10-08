@@ -1,6 +1,6 @@
 defmodule DiscoveryApi.Auth.AuthTest do
   use ExUnit.Case
-  use Divo, services: [:"ecto-postgres", :ldap, :redis]
+  use Divo, services: [:"ecto-postgres", :ldap, :redis, :kafka, :zookeeper]
   use DiscoveryApi.DataCase
 
   alias DiscoveryApi.Data.Model
@@ -34,7 +34,7 @@ defmodule DiscoveryApi.Auth.AuthTest do
       Helper.sample_model(%{
         private: true,
         organization: @organization_1_name,
-        organizationDetails: organization_1,
+        organization_id: organization_1.org_id,
         keywords: ["dataset", "facet1"]
       })
 
@@ -42,7 +42,7 @@ defmodule DiscoveryApi.Auth.AuthTest do
       Helper.sample_model(%{
         private: true,
         organization: @organization_2_name,
-        organizationDetails: organization_2,
+        organization_id: organization_2.org_id,
         keywords: ["dataset", "facet2"]
       })
 
@@ -50,7 +50,7 @@ defmodule DiscoveryApi.Auth.AuthTest do
       Helper.sample_model(%{
         private: false,
         organization: @organization_1_name,
-        organizationDetails: organization_1,
+        organization_id: organization_1.org_id,
         keywords: ["dataset", "public_facet"]
       })
 

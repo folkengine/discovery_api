@@ -1,10 +1,12 @@
 defmodule DiscoveryApi.Stats.CompletenessTest do
   use ExUnit.Case
   use Divo
+  use DiscoveryApi.DataCase
 
   import SmartCity.TestHelper
 
-  alias SmartCity.Registry.{Dataset, Organization}
+  alias SmartCity.Registry.Dataset
+  alias DiscoveryApi.Test.Helper
   alias DiscoveryApi.TestDataGenerator, as: TDG
   alias DiscoveryApi.Data.Persistence
   alias DiscoveryApi.Stats.StatsCalculator
@@ -18,13 +20,12 @@ defmodule DiscoveryApi.Stats.CompletenessTest do
   @moduletag capture_log: true
   describe "produce_completeness_stats/0" do
     test "Adds stats entries for dataset to redis" do
-      organization = TDG.create_organization(%{})
-      Organization.write(organization)
+      organization = Helper.save_org()
 
       dataset1 =
         TDG.create_dataset(%{
           technical: %{
-            orgId: organization.id,
+            orgId: organization.org_id,
             private: false,
             systemName: "test_table",
             schema: DataHelper.real_dataset_schema()
@@ -34,7 +35,7 @@ defmodule DiscoveryApi.Stats.CompletenessTest do
       dataset2 =
         TDG.create_dataset(%{
           technical: %{
-            orgId: organization.id,
+            orgId: organization.org_id,
             private: false,
             systemName: "test_table2",
             schema: [

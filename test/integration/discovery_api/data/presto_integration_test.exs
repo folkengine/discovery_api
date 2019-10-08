@@ -1,7 +1,10 @@
 defmodule DiscoveryApi.Data.PrestoIngrationTest do
   use ExUnit.Case
-  use Divo, services: [:redis, :presto, :metastore, :postgres, :minio]
-  alias SmartCity.Registry.{Dataset, Organization}
+  use Divo, services: [:redis, :presto, :metastore, :postgres, :minio, :"ecto-postgres", :kafka, :zookeeper]
+  use DiscoveryApi.DataCase
+
+  alias SmartCity.Registry.Dataset
+  alias DiscoveryApi.Test.Helper
   alias DiscoveryApi.TestDataGenerator, as: TDG
 
   setup do
@@ -18,10 +21,9 @@ defmodule DiscoveryApi.Data.PrestoIngrationTest do
     |> Prestige.execute()
     |> Prestige.prefetch()
 
-    organization = TDG.create_organization(%{})
-    Organization.write(organization)
+    organization = Helper.save_org()
 
-    dataset = TDG.create_dataset(%{id: dataset_id, technical: %{systemName: system_name, orgId: organization.id}})
+    dataset = TDG.create_dataset(%{id: dataset_id, technical: %{systemName: system_name, orgId: organization.org_id}})
     Dataset.write(dataset)
 
     Patiently.wait_for!(
@@ -44,10 +46,9 @@ defmodule DiscoveryApi.Data.PrestoIngrationTest do
     |> Prestige.execute()
     |> Prestige.prefetch()
 
-    organization = TDG.create_organization(%{})
-    Organization.write(organization)
+    organization = Helper.save_org()
 
-    dataset = TDG.create_dataset(%{id: dataset_id, technical: %{systemName: system_name, orgId: organization.id}})
+    dataset = TDG.create_dataset(%{id: dataset_id, technical: %{systemName: system_name, orgId: organization.org_id}})
     Dataset.write(dataset)
 
     expected = [%{"id" => 1, "name" => "bob"}, %{"id" => 2, "name" => "mike"}]

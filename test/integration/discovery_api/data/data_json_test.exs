@@ -1,7 +1,10 @@
 defmodule DiscoveryApi.Data.DataJsonTest do
   use ExUnit.Case
-  use Divo, services: [:redis]
-  alias SmartCity.Registry.{Dataset, Organization}
+  use Divo, services: [:redis, :"ecto-postgres", :kafka, :zookeeper]
+  use DiscoveryApi.DataCase
+
+  alias SmartCity.Registry.Dataset
+  alias DiscoveryApi.Test.Helper
   alias DiscoveryApi.TestDataGenerator, as: TDG
 
   setup do
@@ -10,16 +13,15 @@ defmodule DiscoveryApi.Data.DataJsonTest do
   end
 
   test "Properly formatted metadata is returned after consuming registry messages" do
-    organization = TDG.create_organization(%{})
-    Organization.write(organization)
+    organization = Helper.save_org()
 
-    dataset_one = TDG.create_dataset(%{technical: %{orgId: organization.id, private: true}})
+    dataset_one = TDG.create_dataset(%{technical: %{orgId: organization.org_id, private: true}})
     Dataset.write(dataset_one)
 
-    dataset_two = TDG.create_dataset(%{technical: %{orgId: organization.id}})
+    dataset_two = TDG.create_dataset(%{technical: %{orgId: organization.org_id}})
     Dataset.write(dataset_two)
 
-    dataset_three = TDG.create_dataset(%{technical: %{orgId: organization.id}})
+    dataset_three = TDG.create_dataset(%{technical: %{orgId: organization.org_id}})
     Dataset.write(dataset_three)
 
     Patiently.wait_for!(

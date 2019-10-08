@@ -1,6 +1,7 @@
 defmodule DiscoveryApiWeb.MultipleMetadataView do
   use DiscoveryApiWeb, :view
   alias DiscoveryApi.Data.Model
+  alias DiscoveryApi.Schemas.Organizations
 
   def accepted_formats() do
     ["json"]
@@ -103,15 +104,18 @@ defmodule DiscoveryApiWeb.MultipleMetadataView do
   defp val_or_optional(val), do: val
 
   defp translate_to_dataset(%Model{} = model) do
+    #TODO: should this be looked up in the controller?
+    # also what if we don't find an organization?
+    organization = Organizations.get_organization(model.organization_id)
     %{
       id: model.id,
       name: model.name,
       title: model.title,
       keywords: model.keywords,
       systemName: model.systemName,
-      organization_title: model.organizationDetails.orgTitle,
-      organization_name: model.organizationDetails.orgName,
-      organization_image_url: model.organizationDetails.logoUrl,
+      organization_title: organization.title,
+      organization_name: organization.name,
+      organization_image_url: organization.logo_url,
       modified: model.modifiedDate,
       fileTypes: model.fileTypes,
       description: model.description,

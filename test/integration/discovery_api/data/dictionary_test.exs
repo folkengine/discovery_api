@@ -1,8 +1,11 @@
 defmodule DiscoveryApi.Data.DictionaryTest do
   use ExUnit.Case
-  use Divo, services: [:redis]
+  use Divo, services: [:redis, :"ecto-postgres", :kafka, :zookeeper]
+  use DiscoveryApi.DataCase
+
+  alias DiscoveryApi.Test.Helper
   alias DiscoveryApi.TestDataGenerator, as: TDG
-  alias SmartCity.Registry.{Dataset, Organization}
+  alias SmartCity.Registry.Dataset
 
   setup do
     Redix.command!(:redix, ["FLUSHALL"])
@@ -21,14 +24,13 @@ defmodule DiscoveryApi.Data.DictionaryTest do
     end
 
     test "returns schema for provided dataset id" do
+      organization = Helper.save_org()
       schema = [%{name: "column_name", description: "column description", type: "string"}]
-      organization = TDG.create_organization(%{})
-      Organization.write(organization)
 
       dataset =
         TDG.create_dataset(%{
           business: %{description: "Bob had a horse and this is its data"},
-          technical: %{orgId: organization.id, schema: schema}
+          technical: %{orgId: organization.org_id, schema: schema}
         })
 
       Dataset.write(dataset)
