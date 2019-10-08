@@ -34,7 +34,7 @@ defmodule DiscoveryApiWeb.MetadataController.DetailTest do
         Helper.sample_model(%{id: @dataset_id})
         |> Map.put(:schema, schema)
 
-      org = Helper.sample_org(model.organization_id)
+      org = Helper.sample_org(%{org_id: model.organization_id})
       allow(Organizations.get_organization(org.org_id), return: org)
       allow(Model.get(@dataset_id), return: model)
 
@@ -118,7 +118,7 @@ defmodule DiscoveryApiWeb.MetadataController.DetailTest do
           downloads: 9
         })
 
-      org = Helper.sample_org(model.organization_id, %{ldap_dn: "cn=this_is_a_group,ou=Group"})
+      org = Helper.sample_org(%{org_id: model.organization_id, ldap_dn: "cn=this_is_a_group,ou=Group"})
       allow(Organizations.get_organization(org.org_id), return: org)
 
       allow(Model.get(@dataset_id), return: model)

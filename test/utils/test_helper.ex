@@ -65,9 +65,9 @@ defmodule DiscoveryApi.Test.Helper do
     |> Map.merge(values)
   end
 
-  def sample_org(org_id \\ Faker.UUID.v4(), values \\ %{}) do
+  def sample_org(values \\ %{}) do
     %Organization{
-      org_id: org_id,
+      org_id: Faker.UUID.v4(),
       name: Faker.Lorem.word(),
       title: Faker.Lorem.word(),
       description: Enum.join(Faker.Lorem.sentences(2..3), " "),
@@ -78,8 +78,8 @@ defmodule DiscoveryApi.Test.Helper do
     |> Map.merge(values)
   end
 
-  def save_org(org_id \\ Faker.UUID.v4(), values \\ %{}) do
-    organization = sample_org(org_id, values) |> Map.from_struct()
+  def save_org(values \\ %{}) do
+    organization = sample_org(values) |> Map.from_struct()
     Organizations.create_or_update(organization.org_id, organization)
     organization
   end
@@ -164,7 +164,7 @@ defmodule DiscoveryApi.Test.Helper do
   end
 
   def make_ldap_organization(name, ou) do
-    sample_org(Faker.UUID.v4(), %{name: name, ldap_dn: "cn=#{name},ou=#{ou}"})
+    sample_org(%{name: name, ldap_dn: "cn=#{name},ou=#{ou}"})
   end
 
   def make_ldap_user(name, ou) do

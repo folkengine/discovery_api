@@ -15,7 +15,7 @@ defmodule DiscoveryApi.Data.HostedFileTest do
   @dataset_name "test_id"
 
   setup_all do
-    organization = Helper.save_org(Faker.UUID.v4(), %{name: "test_org"})
+    organization = Helper.save_org(%{name: "test_org"})
 
     %{organization: organization}
   end
