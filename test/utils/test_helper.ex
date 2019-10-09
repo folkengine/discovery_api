@@ -12,7 +12,7 @@ defmodule DiscoveryApi.Test.Helper do
       id: Faker.UUID.v4(),
       title: Faker.Lorem.word(),
       keywords: [Faker.Lorem.word(), Faker.Lorem.word()],
-      organization: Faker.Lorem.word(),
+      # organization: Faker.Lorem.word(),
       organization_id: Faker.UUID.v4(),
       modifiedDate: Date.to_string(Faker.Date.backward(20)),
       fileTypes: [Faker.Lorem.characters(3), Faker.Lorem.characters(4)],

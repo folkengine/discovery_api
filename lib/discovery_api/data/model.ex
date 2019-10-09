@@ -27,6 +27,7 @@ defmodule DiscoveryApi.Data.Model do
     :license,
     :modifiedDate,
     :name,
+    # organization and organizationDetails are no longer populated and should be removed
     :organization,
     :organization_id,
     :organizationDetails,

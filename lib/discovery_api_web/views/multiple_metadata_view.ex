@@ -47,6 +47,7 @@ defmodule DiscoveryApiWeb.MultipleMetadataView do
   defp translate_to_open_dataset(%Model{} = model, organizations) do
     organization_name =
       organizations
+      # TODO - what if this isn't found?
       |> Enum.find(fn org -> org.org_id == model.organization_id end)
       |> Map.get(:name, "")
 
