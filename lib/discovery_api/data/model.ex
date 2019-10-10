@@ -27,7 +27,6 @@ defmodule DiscoveryApi.Data.Model do
     :license,
     :modifiedDate,
     :name,
-    # organization and organizationDetails are no longer populated and should be removed
     :organization,
     :organization_id,
     :organizationDetails,
@@ -53,6 +52,7 @@ defmodule DiscoveryApi.Data.Model do
     (@model_name_space <> id)
     |> Persistence.get()
     |> struct_from_json()
+    |> add_org_details()
     |> add_system_attributes()
   end
 
@@ -121,6 +121,7 @@ defmodule DiscoveryApi.Data.Model do
     (@model_name_space <> "*")
     |> Persistence.get_all()
     |> Enum.map(&struct_from_json/1)
+    |> Enum.map(&add_org_details/1)
   end
 
   defp get_models(ids) do
@@ -128,6 +129,27 @@ defmodule DiscoveryApi.Data.Model do
     |> Enum.map(&(@model_name_space <> &1))
     |> Persistence.get_many(true)
     |> Enum.map(&struct_from_json/1)
+  end
+
+  defp add_org_details(nil), do: nil
+
+  defp add_org_details(model) do
+    organization = DiscoveryApi.Schemas.Organizations.get_organization(model.organization_id)
+
+    organization_information = %{
+      organization: organization.title,
+      organizationDetails: %{
+        id: organization.org_id,
+        orgName: organization.name,
+        orgTitle: organization.title,
+        description: organization.description,
+        logoUrl: organization.logo_url,
+        homepage: organization.homepage,
+        dn: organization.ldap_dn
+      }
+    }
+
+    Map.merge(model, organization_information)
   end
 
   defp add_system_attributes(nil), do: nil
@@ -145,20 +167,19 @@ defmodule DiscoveryApi.Data.Model do
       |> get_all_keys()
       |> Persistence.get_many_with_keys()
 
-    new_models =
-      models
-      |> Enum.map(fn model ->
-        completeness = redis_kv_results["discovery-api:stats:#{model.id}"]
-        downloads = redis_kv_results["smart_registry:downloads:count:#{model.id}"]
-        queries = redis_kv_results["smart_registry:queries:count:#{model.id}"]
-        last_updated_date = redis_kv_results["forklift:last_insert_date:#{model.id}"]
+    models
+    |> Enum.map(fn model ->
+      completeness = redis_kv_results["discovery-api:stats:#{model.id}"]
+      downloads = redis_kv_results["smart_registry:downloads:count:#{model.id}"]
+      queries = redis_kv_results["smart_registry:queries:count:#{model.id}"]
+      last_updated_date = redis_kv_results["forklift:last_insert_date:#{model.id}"]
 
-        model
-        |> Map.put(:completeness, completeness)
-        |> Map.put(:downloads, downloads)
-        |> Map.put(:queries, queries)
-        |> Map.put(:lastUpdatedDate, last_updated_date)
-      end)
+      model
+      |> Map.put(:completeness, completeness)
+      |> Map.put(:downloads, downloads)
+      |> Map.put(:queries, queries)
+      |> Map.put(:lastUpdatedDate, last_updated_date)
+    end)
   end
 
   defp get_all_keys(ids) do

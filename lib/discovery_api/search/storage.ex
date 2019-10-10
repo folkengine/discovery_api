@@ -5,7 +5,6 @@ defmodule DiscoveryApi.Search.Storage do
   use GenServer
 
   alias DiscoveryApi.Data.Model
-  alias DiscoveryApi.Schemas.Organizations
 
   @all_punctuation ~r/[^\w\s]/
 
@@ -40,9 +39,7 @@ defmodule DiscoveryApi.Search.Storage do
   def handle_cast({:index, model}, state) do
     delete_all_for_model(model)
 
-    org = Organizations.get_organization(model.organization_id)
-
-    ([model.title, model.description, org.title] ++ model.keywords)
+    ([model.title, model.description, model.organization] ++ model.keywords)
     |> Enum.map(&String.downcase/1)
     |> Enum.map(&String.split/1)
     |> List.flatten()

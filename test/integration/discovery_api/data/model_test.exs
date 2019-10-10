@@ -1,6 +1,7 @@
 defmodule DiscoveryApi.Data.ModelTest do
   use ExUnit.Case
-  use Divo, services: [:ldap, :redis, :kafka, :zookeeper]
+  use Divo, services: [:"ecto-postgres", :redis, :kafka, :zookeeper]
+  use DiscoveryApi.DataCase
   alias DiscoveryApi.Test.Helper
   alias DiscoveryApi.Data.Model
 
@@ -10,43 +11,44 @@ defmodule DiscoveryApi.Data.ModelTest do
   end
 
   test "Model saves data to Redis" do
-    model = Helper.sample_model()
-    Model.save(model)
-
-    actual =
-      Redix.command!(:redix, ["GET", "discovery-api:model:#{model.id}"])
-      |> Jason.decode!(keys: :atoms)
-
-    assert actual[:id] == model.id
-    assert actual[:title] == model.title
-    assert actual[:systemName] == model.systemName
-    assert actual[:keywords] == model.keywords
-
-    assert actual[:organization] == model.organization
-    assert actual[:modifiedDate] == model.modifiedDate
-
-    assert actual[:fileTypes] == model.fileTypes
-    assert actual[:description] == model.description
-  end
-
-  test "get should return a single model" do
-    expected_model = Helper.sample_model()
-    model_json_string = struct_to_json(expected_model)
+    organization = Helper.save_org()
+    model = Helper.sample_model(%{organization_id: organization.org_id})
     last_updated_date = DateTime.to_iso8601(DateTime.utc_now())
 
-    Redix.command!(:redix, ["SET", "discovery-api:model:#{expected_model.id}", model_json_string])
-    expected_model = %{expected_model | lastUpdatedDate: last_updated_date}
+    Model.save(model)
+    Redix.command!(:redix, ["SET", "discovery-api:stats:#{model.id}", Jason.encode!(model.completeness)])
 
     Redix.command!(:redix, [
       "SET",
-      "forklift:last_insert_date:#{expected_model.id}",
+      "forklift:last_insert_date:#{model.id}",
       last_updated_date
     ])
 
-    Redix.command!(:redix, ["SET", "discovery-api:stats:#{expected_model.id}", Jason.encode!(expected_model.completeness)])
+    actual = Model.get(model.id)
 
-    actual_model = Model.get(expected_model.id)
-    assert actual_model == expected_model
+    assert actual.id == model.id
+    assert actual.title == model.title
+    assert actual.systemName == model.systemName
+    assert actual.keywords == model.keywords
+
+    assert actual.organization == organization.title
+    assert actual.organizationDetails.id == organization.org_id
+    assert actual.organizationDetails.orgName == organization.name
+    assert actual.organizationDetails.orgTitle == organization.title
+    assert actual.organizationDetails.description == organization.description
+    assert actual.organizationDetails.logoUrl == organization.logo_url
+    assert actual.organizationDetails.homepage == organization.homepage
+    assert actual.organizationDetails.dn == organization.ldap_dn
+
+    assert(actual.modifiedDate == model.modifiedDate)
+
+    assert actual.fileTypes == model.fileTypes
+    assert actual.description == model.description
+
+    assert actual.completeness == model.completeness
+    assert actual.lastUpdatedDate == last_updated_date
+    assert Map.has_key?(actual, :downloads)
+    assert Map.has_key?(actual, :queries)
   end
 
   test "get latest should return a single date" do
@@ -65,20 +67,30 @@ defmodule DiscoveryApi.Data.ModelTest do
   end
 
   test "should return all of the models" do
+    organization = Helper.save_org()
     model_id_1 = Faker.UUID.v4()
     model_id_2 = Faker.UUID.v4()
-
-    Enum.each(
-      [Helper.sample_model(%{id: model_id_1}), Helper.sample_model(%{id: model_id_2})],
-      fn model ->
-        Redix.command!(:redix, ["SET", "discovery-api:model:#{model.id}", struct_to_json(model)])
-      end
-    )
-
     expected = [model_id_1, model_id_2] |> Enum.sort()
-    actual = Model.get_all() |> Enum.map(fn model -> model.id end) |> Enum.sort()
 
-    assert expected == actual
+    expected
+    |> Enum.map(fn id -> Helper.sample_model(%{id: id, organization_id: organization.org_id}) end)
+    |> Enum.each(&Model.save/1)
+
+    actual_models = Model.get_all()
+    actual_ids = actual_models |> Enum.map(fn model -> model.id end) |> Enum.sort()
+
+    assert expected == actual_ids
+
+    Enum.each(actual_models, fn actual ->
+      assert actual.organization == organization.title
+      assert actual.organizationDetails.id == organization.org_id
+      assert actual.organizationDetails.orgName == organization.name
+      assert actual.organizationDetails.orgTitle == organization.title
+      assert actual.organizationDetails.description == organization.description
+      assert actual.organizationDetails.logoUrl == organization.logo_url
+      assert actual.organizationDetails.homepage == organization.homepage
+      assert actual.organizationDetails.dn == organization.ldap_dn
+    end)
   end
 
   test "get all returns empty list if no keys exist" do

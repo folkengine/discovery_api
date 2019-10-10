@@ -1,7 +1,6 @@
 defmodule DiscoveryApiWeb.MultipleMetadataView do
   use DiscoveryApiWeb, :view
   alias DiscoveryApi.Data.Model
-  alias DiscoveryApi.Schemas.Organizations
 
   def accepted_formats() do
     ["json"]
@@ -32,25 +31,19 @@ defmodule DiscoveryApiWeb.MultipleMetadataView do
     }
   end
 
-  def render("get_data_json.json", %{models: models, organizations: organizations}) do
-    translate_to_open_data_schema(models, organizations)
+  def render("get_data_json.json", %{models: models}) do
+    translate_to_open_data_schema(models)
   end
 
-  defp translate_to_open_data_schema(models, organizations) do
+  defp translate_to_open_data_schema(models) do
     %{
       conformsTo: "https://project-open-data.cio.gov/v1.1/schema",
       "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
-      dataset: Enum.map(models, &translate_to_open_dataset(&1, organizations))
+      dataset: Enum.map(models, &translate_to_open_dataset/1)
     }
   end
 
-  defp translate_to_open_dataset(%Model{} = model, organizations) do
-    organization_name =
-      organizations
-      # TODO - what if this isn't found?
-      |> Enum.find(fn org -> org.org_id == model.organization_id end)
-      |> Map.get(:title, "")
-
+  defp translate_to_open_dataset(%Model{} = model) do
     %{
       "@type" => "dcat:Dataset",
       "identifier" => model.id,
@@ -60,7 +53,7 @@ defmodule DiscoveryApiWeb.MultipleMetadataView do
       "modified" => model.modifiedDate,
       "publisher" => %{
         "@type" => "org:Organization",
-        "name" => organization_name
+        "name" => model.organization
       },
       "contactPoint" => %{
         "@type" => "vcard:Contact",
@@ -110,19 +103,15 @@ defmodule DiscoveryApiWeb.MultipleMetadataView do
   defp val_or_optional(val), do: val
 
   defp translate_to_dataset(%Model{} = model) do
-    # TODO: should this be looked up in the controller?
-    # also what if we don't find an organization?
-    organization = Organizations.get_organization(model.organization_id)
-
     %{
       id: model.id,
       name: model.name,
       title: model.title,
       keywords: model.keywords,
       systemName: model.systemName,
-      organization_title: organization.title,
-      organization_name: organization.name,
-      organization_image_url: organization.logo_url,
+      organization_title: model.organizationDetails.orgTitle,
+      organization_name: model.organizationDetails.orgName,
+      organization_image_url: model.organizationDetails.logoUrl,
       modified: model.modifiedDate,
       fileTypes: model.fileTypes,
       description: model.description,

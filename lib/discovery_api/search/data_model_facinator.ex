@@ -3,7 +3,7 @@ defmodule DiscoveryApi.Search.DataModelFacinator do
   Module that extracts facets (organizations and tags) from the given datasets and returns unique lists of them with their counts.
   """
 
-  def extract_facets([] = _models, selected_facets, _organizations) do
+  def extract_facets([] = _models, selected_facets) do
     default_values = %{organization: [], keywords: []}
 
     Enum.into(selected_facets, default_values, fn {name, values} ->
@@ -11,11 +11,9 @@ defmodule DiscoveryApi.Search.DataModelFacinator do
     end)
   end
 
-  def extract_facets(models, _selected_facets, _organizations) do
-    # IO.inspect(models, label: "the models")
-
+  def extract_facets(models, _selected_facets) do
     %{
-      organization: unique_facets_with_count(models, :organization_id),
+      organization: unique_facets_with_count(models, :organization),
       keywords: unique_facets_with_count(models, :keywords)
     }
   end

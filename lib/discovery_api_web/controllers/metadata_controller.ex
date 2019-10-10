@@ -2,15 +2,13 @@ defmodule DiscoveryApiWeb.MetadataController do
   use DiscoveryApiWeb, :controller
 
   alias DiscoveryApi.Data.Model
-  alias DiscoveryApi.Schemas.Organizations
 
   plug(:accepts, DiscoveryApiWeb.MetadataView.accepted_formats())
   plug(DiscoveryApiWeb.Plugs.GetModel)
   plug(DiscoveryApiWeb.Plugs.Restrictor)
 
   def fetch_detail(conn, _params) do
-    org = Organizations.get_organization(conn.assigns.model.organization_id)
-    render(conn, :detail, model: conn.assigns.model, org: org)
+    render(conn, :detail, model: conn.assigns.model)
   end
 
   def fetch_schema(conn, _params) do
