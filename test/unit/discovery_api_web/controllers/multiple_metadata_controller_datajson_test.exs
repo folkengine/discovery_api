@@ -12,7 +12,6 @@ defmodule DiscoveryApiWeb.MultipleMetadataController.DataJsonTest do
         title: "my title",
         description: "description",
         modifiedDate: "The Date",
-        organization: "Organization 1",
         contactName: "Bob Jones",
         contactEmail: "bjones@example.com",
         license: "http://openlicense.org",
@@ -40,18 +39,24 @@ defmodule DiscoveryApiWeb.MultipleMetadataController.DataJsonTest do
         private: true
       })
 
+    org = Helper.sample_org(%{org_id: public_model.organization_id})
+
+    allow(DiscoveryApi.Schemas.Organizations.list_organizations(), return: [org])
+
     {:ok,
      %{
-       models: [private_model, public_model]
+       models: [private_model, public_model],
+       org: org
      }}
   end
 
   describe "GET with all fields" do
-    setup %{conn: conn, models: [_private_model, public_model] = models} do
+    setup %{conn: conn, models: [_private_model, public_model] = models, org: org} do
       allow Model.get_all(), return: models
+
       results = conn |> get("/api/v1/data_json") |> json_response(200) |> Map.get("dataset")
 
-      {:ok, %{model: public_model, results: results}}
+      {:ok, %{model: public_model, results: results, org: org}}
     end
 
     test "only a single dataset (the public one) is returned", %{results: results} do
@@ -62,13 +67,13 @@ defmodule DiscoveryApiWeb.MultipleMetadataController.DataJsonTest do
       assert "public" == result["accessLevel"]
     end
 
-    test "maps fields of interest", %{model: model, results: [result | _]} do
+    test "maps fields of interest", %{model: model, results: [result | _], org: org} do
       assert model.id == result["identifier"]
       assert model.title == result["title"]
       assert model.description == result["description"]
       assert model.keywords == result["keyword"]
       assert model.modifiedDate == result["modified"]
-      assert model.organization == result["publisher"]["name"]
+      assert org.title == result["publisher"]["name"]
       assert model.contactName == result["contactPoint"]["fn"]
       assert "mailto:" <> model.contactEmail == result["contactPoint"]["hasEmail"]
       assert model.homepage == result["landingPage"]
@@ -109,13 +114,13 @@ defmodule DiscoveryApiWeb.MultipleMetadataController.DataJsonTest do
   end
 
   describe "GET with only required fields" do
-    test "drops optional fields with nil value", %{conn: conn} do
+    test "drops optional fields with nil value", %{conn: conn, org: org} do
       model = %Model{
         id: "myfancydata",
         title: "my title",
         description: "description",
         modifiedDate: "The Date",
-        organization: "Organization 1",
+        organization_id: org.org_id,
         contactName: "Bob Jones",
         contactEmail: "bjones@example.com",
         license: "The License",

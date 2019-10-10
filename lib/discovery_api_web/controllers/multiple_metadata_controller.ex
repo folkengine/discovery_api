@@ -20,6 +20,7 @@ defmodule DiscoveryApiWeb.MultipleMetadataController do
     query = Map.get(params, "query", "")
     selected_facets = Map.get(params, "facets", %{})
     api_accessible = parse_api_accessible(params)
+    # organizations = DiscoveryApi.Schemas.Organizations.list_organizations()
 
     with {:ok, offset} <- extract_int_from_params(params, "offset", 0),
          {:ok, limit} <- extract_int_from_params(params, "limit", 10),
@@ -28,7 +29,7 @@ defmodule DiscoveryApiWeb.MultipleMetadataController do
          filtered_result <- DataModelFilterator.filter_by_facets(search_result, filter_facets),
          filtered_by_source_type_results <- filter_by_source_type(filtered_result, api_accessible),
          authorized_results <- remove_unauthorized_models(conn, filtered_by_source_type_results),
-         facets <- DataModelFacinator.extract_facets(authorized_results, filter_facets) do
+         facets <- DataModelFacinator.extract_facets(authorized_results, filter_facets, []) do
       render(
         conn,
         :search_dataset_summaries,

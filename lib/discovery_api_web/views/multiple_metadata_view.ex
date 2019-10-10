@@ -49,7 +49,7 @@ defmodule DiscoveryApiWeb.MultipleMetadataView do
       organizations
       # TODO - what if this isn't found?
       |> Enum.find(fn org -> org.org_id == model.organization_id end)
-      |> Map.get(:name, "")
+      |> Map.get(:title, "")
 
     %{
       "@type" => "dcat:Dataset",

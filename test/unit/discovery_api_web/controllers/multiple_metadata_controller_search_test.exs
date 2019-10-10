@@ -6,24 +6,33 @@ defmodule DiscoveryApiWeb.MultipleMetadataController.SearchTest do
   alias DiscoveryApi.Test.Helper
 
   setup do
-    mock_dataset_summaries = [
-      generate_model("Paul", ~D(1970-01-01), "remote"),
-      generate_model("Richard", ~D(2001-09-09), "ingest")
-    ]
+    model1 = generate_model("Paul", ~D(1970-01-01), "remote")
+    model2 = generate_model("Richard", ~D(2001-09-09), "ingest")
+    mock_dataset_summaries = [model1, model2]
 
+    org1 = Helper.sample_org(%{title: "Paul Co.", org_id: model1.organization_id})
+    org2 = Helper.sample_org(%{title: "Richard Co.", org_id: model2.organization_id})
+
+    allow(DiscoveryApi.Schemas.Organizations.get_organization(org1.org_id), return: org1)
+    allow(DiscoveryApi.Schemas.Organizations.get_organization(org2.org_id), return: org2)
     allow(Model.get_all(), return: mock_dataset_summaries)
     :ok
   end
 
   describe "fetch dataset summaries" do
     data_test "request to search with #{inspect(params)}", %{conn: conn} do
-      response_map = conn |> get("/api/v1/dataset/search", params) |> json_response(200)
+      response_map =
+        conn
+        |> get("/api/v1/dataset/search", params)
+        |> json_response(200)
+        |> IO.inspect(label: "RESULT")
+
       actual = get_in(response_map, selector)
 
-      assert actual == result
+      assert actual == expected
 
       where([
-        [:params, :selector, :result],
+        [:params, :selector, :expected],
         [[sort: "name_asc"], ["metadata", "totalDatasets"], 2],
         [[sort: "name_asc", limit: "5"], ["metadata", "limit"], 5],
         [[sort: "name_asc", limit: "1"], ["metadata", "totalDatasets"], 2],
@@ -135,14 +144,15 @@ defmodule DiscoveryApiWeb.MultipleMetadataController.SearchTest do
       name: "#{id}-name",
       title: "#{id}-title",
       modifiedDate: "#{date}",
-      organization: "#{id} Co.",
+      organization_id: Faker.UUID.v4(),
+      # organization: "#{id} Co.",
       keywords: ["#{id} keywords"],
       sourceType: sourceType,
-      organizationDetails: %{
-        orgTitle: "#{id}-org-title",
-        orgName: "#{id}-org-name",
-        logoUrl: "#{id}-org.png"
-      },
+      # organizationDetails: %{
+      #   orgTitle: "#{id}-org-title",
+      #   orgName: "#{id}-org-name",
+      #   logoUrl: "#{id}-org.png"
+      # },
       private: false
     })
   end
