@@ -6,21 +6,28 @@ defmodule DiscoveryApiWeb.MetadataView do
     ["json"]
   end
 
-  def render("detail.json", %{model: model, org: org}) do
-    translate_to_dataset_detail(model, org)
+  def render("detail.json", %{model: model}) do
+    translate_to_dataset_detail(model)
   end
 
   def render("fetch_schema.json", %{model: %{schema: schema}}) do
     format_schema(schema)
   end
 
-  defp translate_to_dataset_detail(%Model{} = model, org) do
+  defp translate_to_dataset_detail(%Model{} = model) do
     %{
       name: model.name,
       title: model.title,
       description: model.description,
       id: model.id,
       keywords: model.keywords,
+      organization: %{
+        name: model.organizationDetails.orgName,
+        title: model.organizationDetails.orgTitle,
+        image: model.organizationDetails.logoUrl,
+        description: model.organizationDetails.description,
+        homepage: model.organizationDetails.homepage
+      },
       sourceType: model.sourceType,
       sourceFormat: model.sourceFormat,
       sourceUrl: model.sourceUrl,
@@ -49,19 +56,6 @@ defmodule DiscoveryApiWeb.MetadataView do
       schema: format_schema(model.schema),
       systemName: model.systemName
     }
-    |> with_organization(org)
-  end
-
-  defp with_organization(map, nil), do: map
-
-  defp with_organization(map, org) do
-    Map.put(map, :organization, %{
-      name: org.name,
-      title: org.title,
-      image: org.logo_url,
-      description: org.description,
-      homepage: org.homepage
-    })
   end
 
   defp format_schema(schema_fields) do

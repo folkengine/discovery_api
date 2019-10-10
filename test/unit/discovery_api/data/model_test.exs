@@ -4,6 +4,14 @@ defmodule DiscoveryApi.Data.ModelTest do
   require Assertions
   alias DiscoveryApi.Data.{Model, Persistence}
   alias DiscoveryApi.Test.Helper
+  alias DiscoveryApi.Schemas.Organizations
+
+  setup do
+    org = Helper.sample_org()
+    allow(Organizations.get_organization(any()), return: org)
+
+    {:ok, %{org: org}}
+  end
 
   test "save/1" do
     dataset = Helper.sample_model() |> Map.put(:keywords, nil)
@@ -34,8 +42,8 @@ defmodule DiscoveryApi.Data.ModelTest do
     assert actual_metrics == expected
   end
 
-  test "get/1" do
-    {_cam, cam_as_json, cam_as_expected} = generate_test_data("cam")
+  test "get/1", %{org: org} do
+    {_cam, cam_as_json, cam_as_expected} = generate_test_data("cam", org)
 
     allow Persistence.get("discovery-api:model:cam"), return: cam_as_json
 
@@ -44,9 +52,9 @@ defmodule DiscoveryApi.Data.ModelTest do
     assert cam_as_expected == Model.get("cam")
   end
 
-  test "get_all/1" do
-    {_cam, cam_as_json, cam_as_expected} = generate_test_data("cam")
-    {_paul, paul_as_json, paul_as_expected} = generate_test_data("paul")
+  test "get_all/1", %{org: org} do
+    {_cam, cam_as_json, cam_as_expected} = generate_test_data("cam", org)
+    {_paul, paul_as_json, paul_as_expected} = generate_test_data("paul", org)
 
     allow Persistence.get_many(["discovery-api:model:cam", "discovery-api:model:paul"], true), return: [cam_as_json, paul_as_json]
 
@@ -56,8 +64,8 @@ defmodule DiscoveryApi.Data.ModelTest do
     Assertions.assert_lists_equal([cam_as_expected, paul_as_expected], Model.get_all(["cam", "paul"]))
   end
 
-  test "get_all/1 does not throw error when model has been deleted from redis" do
-    {_paul, paul_as_json, paul_as_expected} = generate_test_data("paul")
+  test "get_all/1 does not throw error when model has been deleted from redis", %{org: org} do
+    {_paul, paul_as_json, paul_as_expected} = generate_test_data("paul", org)
 
     allow Persistence.get_many(any(), true), return: [paul_as_json]
 
@@ -67,8 +75,8 @@ defmodule DiscoveryApi.Data.ModelTest do
     Assertions.assert_lists_equal([paul_as_expected], Model.get_all(["cam", "paul"]))
   end
 
-  test "get_all/0" do
-    {_cam, cam_as_json, cam_as_expected} = generate_test_data("cam")
+  test "get_all/0", %{org: org} do
+    {_cam, cam_as_json, cam_as_expected} = generate_test_data("cam", org)
 
     allow Persistence.get_all("discovery-api:model:*"), return: [cam_as_json]
 
@@ -100,13 +108,32 @@ defmodule DiscoveryApi.Data.ModelTest do
     }
   end
 
-  defp generate_test_data(name) do
-    model = Helper.sample_model(%{id: name})
+  defp generate_test_data(name, organization) do
+    model = Helper.sample_model(%{id: name, organization_id: organization.org_id})
     model_as_json = model |> Map.from_struct() |> Jason.encode!()
 
     [x, y, z] = Stream.repeatedly(&:rand.uniform/0) |> Enum.take(3)
 
-    expected_model = Map.merge(model, %{completeness: %{completeness: x}, downloads: y, queries: z, lastUpdatedDate: DateTime.utc_now()})
+    organization_information = %{
+      organization: organization.title,
+      organizationDetails: %{
+        id: organization.org_id,
+        orgName: organization.name,
+        orgTitle: organization.title,
+        description: organization.description,
+        logoUrl: organization.logo_url,
+        homepage: organization.homepage,
+        dn: organization.ldap_dn
+      }
+    }
+
+    expected_model =
+      model
+      |> Map.merge(%{completeness: %{completeness: x}, downloads: y, queries: z, lastUpdatedDate: DateTime.utc_now()})
+      |> Map.merge(organization_information)
+
+    # IO.inspect(organization, label: "org in")
+    # IO.inspect(expected_model, label: "expected_model")
 
     {model, model_as_json, expected_model}
   end

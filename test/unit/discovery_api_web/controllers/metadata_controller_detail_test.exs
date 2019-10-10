@@ -34,8 +34,6 @@ defmodule DiscoveryApiWeb.MetadataController.DetailTest do
         Helper.sample_model(%{id: @dataset_id})
         |> Map.put(:schema, schema)
 
-      org = Helper.sample_org(%{org_id: model.organization_id})
-      allow(Organizations.get_organization(org.org_id), return: org)
       allow(Model.get(@dataset_id), return: model)
 
       actual = conn |> get("/api/v1/dataset/#{@dataset_id}") |> json_response(200)
@@ -52,11 +50,11 @@ defmodule DiscoveryApiWeb.MetadataController.DetailTest do
                "description" => model.description,
                "keywords" => model.keywords,
                "organization" => %{
-                 "name" => org.name,
-                 "title" => org.title,
-                 "image" => org.logo_url,
-                 "description" => org.description,
-                 "homepage" => org.homepage
+                 "name" => model.organizationDetails.orgName,
+                 "title" => model.organizationDetails.orgTitle,
+                 "image" => model.organizationDetails.logoUrl,
+                 "description" => model.organizationDetails.description,
+                 "homepage" => model.organizationDetails.homepage
                },
                "schema" => expected_schema,
                "sourceType" => model.sourceType,
@@ -92,18 +90,6 @@ defmodule DiscoveryApiWeb.MetadataController.DetailTest do
       expect(Model.get(any()), return: nil)
 
       conn |> get("/api/v1/dataset/xyz123") |> json_response(404)
-    end
-
-    test "retrieves dataset without organization when organization is not found", %{conn: conn} do
-      model = Helper.sample_model(%{id: @dataset_id, organization_id: "i-do-not-exist"})
-
-      allow(Organizations.get_organization(any()), return: nil)
-      allow(Model.get(@dataset_id), return: model)
-
-      actual = conn |> get("/api/v1/dataset/#{@dataset_id}") |> json_response(200)
-
-      assert Map.get(actual, "id") == model.id
-      assert !Map.has_key?(actual, "organization")
     end
   end
 

@@ -129,6 +129,7 @@ defmodule DiscoveryApi.Data.Model do
     |> Enum.map(&(@model_name_space <> &1))
     |> Persistence.get_many(true)
     |> Enum.map(&struct_from_json/1)
+    |> Enum.map(&add_org_details/1)
   end
 
   defp add_org_details(nil), do: nil
