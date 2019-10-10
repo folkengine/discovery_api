@@ -16,8 +16,6 @@ defmodule DiscoveryApi.OrganizationUpdateTest do
 
     result = get("http://localhost:4000/api/v1/organization/#{org.id}")
 
-    IO.inspect(result, label: "result")
-
     assert result.status_code == 200
     new_org = Jason.decode!(result.body)
 

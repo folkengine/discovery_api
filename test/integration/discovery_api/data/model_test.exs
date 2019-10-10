@@ -98,21 +98,21 @@ defmodule DiscoveryApi.Data.ModelTest do
   end
 
   test "get all should return the models for all the ids specified" do
-    model1 = Helper.sample_model()
-    model2 = Helper.sample_model()
-    model3 = Helper.sample_model()
-
-    [model1, model2, model3]
-    |> Enum.each(fn model -> Redix.command!(:redix, ["SET", "discovery-api:model:#{model.id}", struct_to_json(model)]) end)
+    organization = Helper.save_org()
+    model1 = Helper.sample_model(%{organization_id: organization.org_id})
+    model2 = Helper.sample_model(%{organization_id: organization.org_id})
+    model3 = Helper.sample_model(%{organization_id: organization.org_id})
 
     [model1, model2, model3]
     |> Enum.each(fn model ->
+      Model.save(model)
       Redix.command!(:redix, ["SET", "discovery-api:stats:#{model.id}", Jason.encode!(model.completeness)])
     end)
 
     results = Model.get_all([model1.id, model3.id])
-    assert model1 in results
-    assert model3 in results
+
+    assert Model.get(model1.id) in results
+    assert Model.get(model3.id) in results
     assert 2 == length(results)
   end
 

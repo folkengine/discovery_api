@@ -132,9 +132,6 @@ defmodule DiscoveryApi.Data.ModelTest do
       |> Map.merge(%{completeness: %{completeness: x}, downloads: y, queries: z, lastUpdatedDate: DateTime.utc_now()})
       |> Map.merge(organization_information)
 
-    # IO.inspect(organization, label: "org in")
-    # IO.inspect(expected_model, label: "expected_model")
-
     {model, model_as_json, expected_model}
   end
 end

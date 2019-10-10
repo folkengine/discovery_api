@@ -14,8 +14,10 @@ defmodule DiscoveryApi.Data.DatasetEventListener do
 
     with {:ok, _cached} <- SystemNameCache.put(dataset),
          model <- Mapper.to_data_model(dataset),
-         {:ok, _result} <- Model.save(model) do
-      DiscoveryApi.Search.Storage.index(model)
+         #  {:ok, _result} <- Model.save(model) do
+         {:ok, _result} <- Model.save(model),
+         model_with_org <- Model.get(model.id) do
+      DiscoveryApi.Search.Storage.index(model_with_org)
       save_dataset_to_recommendation_engine(dataset)
       ResponseCache.invalidate()
       Logger.debug(fn -> "Successfully handled message: `#{dataset.technical.systemName}`" end)

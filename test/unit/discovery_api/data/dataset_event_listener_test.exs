@@ -12,6 +12,7 @@ defmodule DiscoveryApi.Data.DatasetEventListenerTest do
       allow ResponseCache.invalidate(), return: :ok
       allow DiscoveryApi.Search.Storage.index(any()), return: :ok
       allow DiscoveryApi.RecommendationEngine.save(any()), return: :ok
+      allow Model.get(any()), return: :ok
 
       :ok
     end
