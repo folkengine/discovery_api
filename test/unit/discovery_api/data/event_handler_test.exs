@@ -2,6 +2,7 @@ defmodule DiscoveryApi.EventListenerTest do
   use ExUnit.Case
   use Placebo
 
+  import DiscoveryApi
   import SmartCity.Event, only: [organization_update: 0, data_ingest_start: 0]
 
   alias SmartCity.TestDataGenerator, as: TDG
@@ -13,7 +14,7 @@ defmodule DiscoveryApi.EventListenerTest do
       org = TDG.create_organization(%{})
       allow(Organizations.create_or_update(any()), return: :dontcare)
 
-      Brook.Test.with_event(:discovery_api_brook, fn ->
+      Brook.Test.with_event(instance(), fn ->
         EventHandler.handle_event(Brook.Event.new(type: data_ingest_start(), data: org, author: :author))
       end)
 
@@ -24,7 +25,7 @@ defmodule DiscoveryApi.EventListenerTest do
       org = TDG.create_organization(%{})
       allow(Organizations.create_or_update(any()), return: :dontcare)
 
-      Brook.Test.with_event(:discovery_api_brook, fn ->
+      Brook.Test.with_event(instance(), fn ->
         EventHandler.handle_event(Brook.Event.new(type: organization_update(), data: org, author: :author))
       end)
 

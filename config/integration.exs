@@ -61,7 +61,6 @@ config :discovery_api, DiscoveryApi.Repo,
   port: "5456"
 
 config :discovery_api, :brook,
-  instance: :discovery_api_brook,
   driver: [
     module: Brook.Driver.Kafka,
     init_arg: [

@@ -4,6 +4,8 @@ defmodule DiscoveryApi.Application do
   """
   use Application
 
+  import DiscoveryApi
+
   def start(_type, _args) do
     import Supervisor.Spec
 
@@ -22,7 +24,7 @@ defmodule DiscoveryApi.Application do
         supervisor(DiscoveryApiWeb.Endpoint, []),
         DiscoveryApi.Quantum.Scheduler,
         ecto_repo(),
-        {Brook, Application.get_env(:discovery_api, :brook)}
+        {Brook, Application.get_env(:discovery_api, :brook) |> Keyword.put(:instance, instance())}
       ]
       |> List.flatten()
 

@@ -24,7 +24,6 @@ config :paddle, Paddle, base: "dc=example,dc=org"
 config :discovery_api, DiscoveryApi.Auth.Auth0.Guardian, issuer: "https://smartcolumbusos-demo.auth0.com/"
 
 config :discovery_api, :brook,
-  instance: :discovery_api_brook,
   driver: [
     module: Brook.Driver.Default,
     init_arg: []

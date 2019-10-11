@@ -70,27 +70,17 @@ defmodule DiscoveryApi.Data.ModelTest do
     organization = Helper.save_org()
     model_id_1 = Faker.UUID.v4()
     model_id_2 = Faker.UUID.v4()
-    expected = [model_id_1, model_id_2] |> Enum.sort()
+    model_ids = [model_id_1, model_id_2]
 
-    expected
+    model_ids
     |> Enum.map(fn id -> Helper.sample_model(%{id: id, organization_id: organization.org_id}) end)
     |> Enum.each(&Model.save/1)
 
-    actual_models = Model.get_all()
-    actual_ids = actual_models |> Enum.map(fn model -> model.id end) |> Enum.sort()
+    results = Model.get_all()
 
-    assert expected == actual_ids
-
-    Enum.each(actual_models, fn actual ->
-      assert actual.organization == organization.title
-      assert actual.organizationDetails.id == organization.org_id
-      assert actual.organizationDetails.orgName == organization.name
-      assert actual.organizationDetails.orgTitle == organization.title
-      assert actual.organizationDetails.description == organization.description
-      assert actual.organizationDetails.logoUrl == organization.logo_url
-      assert actual.organizationDetails.homepage == organization.homepage
-      assert actual.organizationDetails.dn == organization.ldap_dn
-    end)
+    assert Model.get(model_id_1) in results
+    assert Model.get(model_id_2) in results
+    assert 2 == length(results)
   end
 
   test "get all returns empty list if no keys exist" do

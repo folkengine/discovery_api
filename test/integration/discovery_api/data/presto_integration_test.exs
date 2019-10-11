@@ -26,11 +26,7 @@ defmodule DiscoveryApi.Data.PrestoIngrationTest do
     dataset = TDG.create_dataset(%{id: dataset_id, technical: %{systemName: system_name, orgId: organization.org_id}})
     Dataset.write(dataset)
 
-    Patiently.wait_for!(
-      fn -> get_dataset_preview(dataset_id) == [] end,
-      dwell: 2000,
-      max_tries: 10
-    )
+    eventually(fn -> get_dataset_preview(dataset_id) == [] end)
   end
 
   @moduletag capture_log: true
@@ -53,11 +49,7 @@ defmodule DiscoveryApi.Data.PrestoIngrationTest do
 
     expected = [%{"id" => 1, "name" => "bob"}, %{"id" => 2, "name" => "mike"}]
 
-    Patiently.wait_for!(
-      fn -> get_dataset_preview(dataset_id) == expected end,
-      dwell: 2000,
-      max_tries: 10
-    )
+    eventually(fn -> get_dataset_preview(dataset_id) == expected end)
   end
 
   defp get_dataset_preview(dataset_id) do

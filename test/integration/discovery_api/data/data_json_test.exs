@@ -24,11 +24,7 @@ defmodule DiscoveryApi.Data.DataJsonTest do
     dataset_three = TDG.create_dataset(%{technical: %{orgId: organization.org_id}})
     Dataset.write(dataset_three)
 
-    Patiently.wait_for!(
-      fn -> public_datasets_available?(2) end,
-      dwell: 1000,
-      max_tries: 20
-    )
+    eventually(fn -> public_datasets_available?(2) end)
 
     actual = get_map_from_url("http://localhost:4000/api/v1/data_json")
     schema = get_schema_from_path("./test/integration/schemas/catalog.json")

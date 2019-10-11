@@ -68,11 +68,7 @@ defmodule DiscoveryApi.RecommendationEngineTest do
 
     SmartCity.Registry.Dataset.write(dataset_to_get_recommendations_for)
 
-    Patiently.wait_for!(
-      fn -> DiscoveryApi.Data.Model.get(dataset_to_get_recommendations_for.id) != nil end,
-      dwell: 100,
-      max_tries: 20
-    )
+    eventually(fn -> DiscoveryApi.Data.Model.get(dataset_to_get_recommendations_for.id) != nil end)
 
     dataset_model = DiscoveryApi.Data.Model.get(dataset_to_get_recommendations_for.id)
 

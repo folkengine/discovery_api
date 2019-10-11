@@ -2,6 +2,8 @@ defmodule DiscoveryApi.Search.StorageTest do
   use ExUnit.Case
   use Placebo
 
+  import SmartCity.TestHelper
+
   alias DiscoveryApi.Test.Helper
   alias DiscoveryApi.Search.Storage
   alias DiscoveryApi.Data.Model
@@ -104,12 +106,8 @@ defmodule DiscoveryApi.Search.StorageTest do
   end
 
   defp assert_words_indexed?(words, id) when is_list(words) do
-    Patiently.wait_for!(
-      fn ->
-        Enum.all?(words, fn word -> {word, id} in :ets.lookup(DiscoveryApi.Search.Storage, word) end)
-      end,
-      dwell: 100,
-      max_tries: 20
-    )
+    eventually(fn ->
+      Enum.all?(words, fn word -> {word, id} in :ets.lookup(DiscoveryApi.Search.Storage, word) end)
+    end)
   end
 end
