@@ -9,9 +9,7 @@ defmodule DiscoveryApi.TestDataGenerator do
   end
 
   def create_organization(term) do
-    term
-    |> SmartCity.TestDataGenerator.create_organization()
-    |> to_registry_module()
+    SmartCity.TestDataGenerator.create_organization(term)
   end
 
   defp to_registry_module(%SmartCity.Dataset{} = dataset) do
@@ -22,14 +20,5 @@ defmodule DiscoveryApi.TestDataGenerator do
     {:ok, data} = SmartCity.Registry.Dataset.new(map)
 
     data
-  end
-
-  defp to_registry_module(%SmartCity.Organization{} = organization) do
-    {:ok, org} =
-      organization
-      |> Map.from_struct()
-      |> SmartCity.Registry.Organization.new()
-
-    org
   end
 end

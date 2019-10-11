@@ -3,6 +3,8 @@ defmodule DiscoveryApi.Data.PrestoIngrationTest do
   use Divo, services: [:redis, :presto, :metastore, :postgres, :minio, :"ecto-postgres", :kafka, :zookeeper]
   use DiscoveryApi.DataCase
 
+  import SmartCity.TestHelper
+
   alias SmartCity.Registry.Dataset
   alias DiscoveryApi.Test.Helper
   alias DiscoveryApi.TestDataGenerator, as: TDG

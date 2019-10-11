@@ -3,6 +3,8 @@ defmodule DiscoveryApi.RecommendationEngineTest do
   use Divo, services: [:redis, :"ecto-postgres", :kafka, :zookeeper]
   use DiscoveryApi.DataCase
 
+  import SmartCity.TestHelper
+
   alias DiscoveryApi.Test.Helper
   alias DiscoveryApi.TestDataGenerator, as: TDG
   alias DiscoveryApi.RecommendationEngine

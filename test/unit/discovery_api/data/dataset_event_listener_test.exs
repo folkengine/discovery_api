@@ -2,7 +2,7 @@ defmodule DiscoveryApi.Data.DatasetEventListenerTest do
   use ExUnit.Case
   use Placebo
   alias DiscoveryApi.Data.{DatasetEventListener, Model, SystemNameCache}
-  alias SmartCity.Registry.Organization
+  alias SmartCity.Organization
   alias DiscoveryApi.TestDataGenerator, as: TDG
   alias DiscoveryApiWeb.Plugs.ResponseCache
   import Checkov
