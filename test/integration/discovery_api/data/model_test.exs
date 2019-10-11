@@ -12,7 +12,7 @@ defmodule DiscoveryApi.Data.ModelTest do
 
   test "Model saves data to Redis" do
     organization = Helper.save_org()
-    model = Helper.sample_model(%{organization_id: organization.org_id})
+    model = Helper.sample_model(%{organization_id: organization.id})
     last_updated_date = DateTime.to_iso8601(DateTime.utc_now())
 
     Model.save(model)
@@ -32,7 +32,7 @@ defmodule DiscoveryApi.Data.ModelTest do
     assert actual.keywords == model.keywords
 
     assert actual.organization == organization.title
-    assert actual.organizationDetails.id == organization.org_id
+    assert actual.organizationDetails.id == organization.id
     assert actual.organizationDetails.orgName == organization.name
     assert actual.organizationDetails.orgTitle == organization.title
     assert actual.organizationDetails.description == organization.description
@@ -73,7 +73,7 @@ defmodule DiscoveryApi.Data.ModelTest do
     model_ids = [model_id_1, model_id_2]
 
     model_ids
-    |> Enum.map(fn id -> Helper.sample_model(%{id: id, organization_id: organization.org_id}) end)
+    |> Enum.map(fn id -> Helper.sample_model(%{id: id, organization_id: organization.id}) end)
     |> Enum.each(&Model.save/1)
 
     results = Model.get_all()
@@ -89,9 +89,9 @@ defmodule DiscoveryApi.Data.ModelTest do
 
   test "get all should return the models for all the ids specified" do
     organization = Helper.save_org()
-    model1 = Helper.sample_model(%{organization_id: organization.org_id})
-    model2 = Helper.sample_model(%{organization_id: organization.org_id})
-    model3 = Helper.sample_model(%{organization_id: organization.org_id})
+    model1 = Helper.sample_model(%{organization_id: organization.id})
+    model2 = Helper.sample_model(%{organization_id: organization.id})
+    model3 = Helper.sample_model(%{organization_id: organization.id})
 
     [model1, model2, model3]
     |> Enum.each(fn model ->

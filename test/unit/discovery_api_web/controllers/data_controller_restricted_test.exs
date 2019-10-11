@@ -29,8 +29,8 @@ defmodule DiscoveryApiWeb.DataController.RestrictedTest do
         ]
       })
 
-    org = Helper.sample_org(%{org_id: model.organization_id, name: @org_name, ldap_dn: "cn=this_is_a_group,ou=Group"})
-    allow(Organizations.get_organization(org.org_id), return: org)
+    org = Helper.sample_org(%{id: model.organization_id, name: @org_name, ldap_dn: "cn=this_is_a_group,ou=Group"})
+    allow(Organizations.get_organization(org.id), return: org)
 
     allow(SystemNameCache.get(@org_name, @data_name), return: @dataset_id)
     allow(Model.get(@dataset_id), return: model)

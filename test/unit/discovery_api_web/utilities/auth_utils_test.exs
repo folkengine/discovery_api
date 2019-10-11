@@ -50,9 +50,9 @@ defmodule DiscoveryApiWeb.Utilities.AuthUtilsTest do
       model = Helper.sample_model(%{private: true, systemName: "private_table"})
       allow Model.get_all(), return: [model]
 
-      org = Helper.sample_org(%{org_id: model.organization_id})
+      org = Helper.sample_org(%{id: model.organization_id})
 
-      allow(Organizations.get_organization(org.org_id), return: org)
+      allow(Organizations.get_organization(org.id), return: org)
       allow PaddleService.get_members(any()), return: ["some_user"]
 
       assert AuthUtils.authorized_to_query?("select * from private_table", "some_user")
@@ -64,9 +64,9 @@ defmodule DiscoveryApiWeb.Utilities.AuthUtilsTest do
 
       model = Helper.sample_model(%{private: true, systemName: "private_table"})
 
-      org = Helper.sample_org(%{org_id: model.organization_id})
+      org = Helper.sample_org(%{id: model.organization_id})
 
-      allow(Organizations.get_organization(org.org_id), return: org)
+      allow(Organizations.get_organization(org.id), return: org)
       allow Model.get_all(), return: [model]
       allow PaddleService.get_members(any()), return: ["mama"]
 
@@ -80,9 +80,9 @@ defmodule DiscoveryApiWeb.Utilities.AuthUtilsTest do
       private_model = Helper.sample_model(%{private: true, systemName: "private_table"})
       public_model = Helper.sample_model(%{private: true, systemName: "public_table"})
 
-      org = Helper.sample_org(%{org_id: private_model.organization_id})
+      org = Helper.sample_org(%{id: private_model.organization_id})
 
-      allow(Organizations.get_organization(org.org_id), return: org)
+      allow(Organizations.get_organization(org.id), return: org)
       allow Model.get_all(), return: [private_model, public_model]
       allow PaddleService.get_members(any()), return: ["mama"]
 
@@ -96,9 +96,9 @@ defmodule DiscoveryApiWeb.Utilities.AuthUtilsTest do
       model = Helper.sample_model(%{private: true, systemName: "public_table"})
       allow Model.get_all(), return: [model]
 
-      org = Helper.sample_org(%{org_id: model.organization_id})
+      org = Helper.sample_org(%{id: model.organization_id})
 
-      allow(Organizations.get_organization(org.org_id), return: org)
+      allow(Organizations.get_organization(org.id), return: org)
       allow PaddleService.get_members(any()), return: ["some_user"]
 
       refute AuthUtils.authorized_to_query?("select * from public_table", "some_user")
@@ -119,9 +119,9 @@ defmodule DiscoveryApiWeb.Utilities.AuthUtilsTest do
 
       model = Helper.sample_model(%{private: true, systemName: "PuBliC_TaBlE"})
 
-      org = Helper.sample_org(%{org_id: model.organization_id})
+      org = Helper.sample_org(%{id: model.organization_id})
 
-      allow(Organizations.get_organization(org.org_id), return: org)
+      allow(Organizations.get_organization(org.id), return: org)
       allow Model.get_all(), return: [model]
       allow PaddleService.get_members(any()), return: ["some_user"]
 

@@ -20,14 +20,14 @@ defmodule DiscoveryApi.Schemas.Organizations do
     })
   end
 
-  def create_or_update(org_id, changes \\ %{}) do
-    case Repo.get_by(Organization, org_id: org_id) do
-      nil -> %Organization{org_id: org_id}
+  def create_or_update(id, changes \\ %{}) do
+    case Repo.get(Organization, id) do
+      nil -> %Organization{id: id}
       organization -> organization
     end
     |> Organization.changeset(changes)
     |> Repo.insert_or_update()
   end
 
-  def get_organization(org_id), do: Repo.get_by(Organization, org_id: org_id)
+  def get_organization(id), do: Repo.get_by(Organization, id: id)
 end

@@ -140,7 +140,7 @@ defmodule DiscoveryApi.Data.Model do
     organization_information = %{
       organization: organization.title,
       organizationDetails: %{
-        id: organization.org_id,
+        id: organization.id,
         orgName: organization.name,
         orgTitle: organization.title,
         description: organization.description,

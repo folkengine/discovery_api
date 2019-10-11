@@ -68,7 +68,7 @@ defmodule DiscoveryApi.Test.Helper do
 
   def sample_org(values \\ %{}) do
     %Organization{
-      org_id: Faker.UUID.v4(),
+      id: Faker.UUID.v4(),
       name: Faker.Lorem.word(),
       title: Faker.Lorem.word(),
       description: Enum.join(Faker.Lorem.sentences(2..3), " "),
@@ -81,7 +81,7 @@ defmodule DiscoveryApi.Test.Helper do
 
   def save_org(values \\ %{}) do
     organization = sample_org(values) |> Map.from_struct()
-    Organizations.create_or_update(organization.org_id, organization)
+    Organizations.create_or_update(organization.id, organization)
     organization
   end
 
@@ -140,7 +140,7 @@ defmodule DiscoveryApi.Test.Helper do
 
     Enum.map(membership, fn {organization_name, members} ->
       organization = make_ldap_organization(organization_name, group)
-      Organizations.create_or_update(organization.org_id, organization |> Map.from_struct())
+      Organizations.create_or_update(organization.id, organization |> Map.from_struct())
 
       Enum.each(members, fn member ->
         username = make_ldap_user(member, people)

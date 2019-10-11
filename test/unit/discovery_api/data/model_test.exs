@@ -109,7 +109,7 @@ defmodule DiscoveryApi.Data.ModelTest do
   end
 
   defp generate_test_data(name, organization) do
-    model = Helper.sample_model(%{id: name, organization_id: organization.org_id})
+    model = Helper.sample_model(%{id: name, organization_id: organization.id})
     model_as_json = model |> Map.from_struct() |> Jason.encode!()
 
     [x, y, z] = Stream.repeatedly(&:rand.uniform/0) |> Enum.take(3)
@@ -117,7 +117,7 @@ defmodule DiscoveryApi.Data.ModelTest do
     organization_information = %{
       organization: organization.title,
       organizationDetails: %{
-        id: organization.org_id,
+        id: organization.id,
         orgName: organization.name,
         orgTitle: organization.title,
         description: organization.description,

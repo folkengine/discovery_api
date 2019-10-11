@@ -9,7 +9,7 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
 
   import Checkov
 
-  @org_id "12343532"
+  @org_id "A12343532"
 
   setup do
     Repo.delete_all(Organization)
@@ -20,7 +20,6 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
   describe "create_or_update/2" do
     test "creates an organization" do
       org = %{
-        org_id: @org_id,
         name: "a",
         title: "b",
         description: "description",
@@ -33,7 +32,7 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
 
       actual = Organizations.get_organization(@org_id)
       assert !is_nil(actual)
-      assert org.org_id == actual.org_id
+      assert @org_id == actual.id
       assert org.name == actual.name
       assert org.title == actual.title
       assert org.description == actual.description
@@ -87,7 +86,7 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
 
       actual = Organizations.get_organization(@org_id)
       assert !is_nil(actual)
-      assert org.id == actual.org_id
+      assert @org_id == actual.id
       assert org.orgName == actual.name
       assert org.orgTitle == actual.title
       assert org.description == actual.description

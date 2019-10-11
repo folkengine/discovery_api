@@ -34,7 +34,7 @@ defmodule DiscoveryApi.Auth.AuthTest do
       Helper.sample_model(%{
         private: true,
         organization: organization_1.title,
-        organization_id: organization_1.org_id,
+        organization_id: organization_1.id,
         keywords: ["dataset", "facet1"]
       })
 
@@ -42,7 +42,7 @@ defmodule DiscoveryApi.Auth.AuthTest do
       Helper.sample_model(%{
         private: true,
         organization: organization_2.title,
-        organization_id: organization_2.org_id,
+        organization_id: organization_2.id,
         keywords: ["dataset", "facet2"]
       })
 
@@ -50,7 +50,7 @@ defmodule DiscoveryApi.Auth.AuthTest do
       Helper.sample_model(%{
         private: false,
         organization: organization_1.title,
-        organization_id: organization_1.org_id,
+        organization_id: organization_1.id,
         keywords: ["dataset", "public_facet"]
       })
 

@@ -104,8 +104,8 @@ defmodule DiscoveryApiWeb.MetadataController.DetailTest do
           downloads: 9
         })
 
-      org = Helper.sample_org(%{org_id: model.organization_id, ldap_dn: "cn=this_is_a_group,ou=Group"})
-      allow(Organizations.get_organization(org.org_id), return: org)
+      org = Helper.sample_org(%{id: model.organization_id, ldap_dn: "cn=this_is_a_group,ou=Group"})
+      allow(Organizations.get_organization(org.id), return: org)
 
       allow(Model.get(@dataset_id), return: model)
 

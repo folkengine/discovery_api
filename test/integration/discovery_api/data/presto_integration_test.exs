@@ -25,7 +25,7 @@ defmodule DiscoveryApi.Data.PrestoIngrationTest do
 
     organization = Helper.save_org()
 
-    dataset = TDG.create_dataset(%{id: dataset_id, technical: %{systemName: system_name, orgId: organization.org_id}})
+    dataset = TDG.create_dataset(%{id: dataset_id, technical: %{systemName: system_name, orgId: organization.id}})
     Dataset.write(dataset)
 
     eventually(fn -> get_dataset_preview(dataset_id) == [] end)
@@ -46,7 +46,7 @@ defmodule DiscoveryApi.Data.PrestoIngrationTest do
 
     organization = Helper.save_org()
 
-    dataset = TDG.create_dataset(%{id: dataset_id, technical: %{systemName: system_name, orgId: organization.org_id}})
+    dataset = TDG.create_dataset(%{id: dataset_id, technical: %{systemName: system_name, orgId: organization.id}})
     Dataset.write(dataset)
 
     expected = [%{"id" => 1, "name" => "bob"}, %{"id" => 2, "name" => "mike"}]

@@ -6,8 +6,7 @@ defmodule DiscoveryApiWeb.OrganizationControllerTest do
   describe "organization controller" do
     test "fetches organization by org id", %{conn: conn} do
       ecto_response = %DiscoveryApi.Schemas.Organizations.Organization{
-        id: 784,
-        org_id: "1234",
+        id: "1234",
         name: "Org Name",
         title: "Org Title",
         description: nil,
@@ -17,7 +16,7 @@ defmodule DiscoveryApiWeb.OrganizationControllerTest do
       }
 
       expected = %{
-        "org_id" => "1234",
+        "id" => "1234",
         "name" => "Org Name",
         "title" => "Org Title",
         "description" => nil,

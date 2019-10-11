@@ -30,7 +30,7 @@ defmodule DiscoveryApi.Data.DictionaryTest do
       dataset =
         TDG.create_dataset(%{
           business: %{description: "Bob had a horse and this is its data"},
-          technical: %{orgId: organization.org_id, schema: schema}
+          technical: %{orgId: organization.id, schema: schema}
         })
 
       Dataset.write(dataset)

@@ -56,7 +56,7 @@ defmodule DiscoveryApi.Data.SearchTest do
       dataset =
         TDG.create_dataset(%{
           business: %{description: "Bob had a horse and this is its data"},
-          technical: %{orgId: organization.org_id, schema: []}
+          technical: %{orgId: organization.id, schema: []}
         })
 
       Dataset.write(dataset)

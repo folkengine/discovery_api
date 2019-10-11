@@ -36,7 +36,7 @@ defmodule DiscoveryApi.Data.QueryTest do
         id: @public_dataset_id,
         technical: %{
           private: false,
-          orgId: organization.org_id,
+          orgId: organization.id,
           orgName: organization.name,
           dataName: @public_dataset_name,
           systemName: "#{organization.name}__#{@public_dataset_name}"
@@ -48,7 +48,7 @@ defmodule DiscoveryApi.Data.QueryTest do
         id: @private_dataset_id,
         technical: %{
           private: true,
-          orgId: organization.org_id,
+          orgId: organization.id,
           orgName: organization.name,
           dataName: @private_dataset_name,
           systemName: "#{organization.name}__#{@private_dataset_name}"
@@ -60,7 +60,7 @@ defmodule DiscoveryApi.Data.QueryTest do
         id: "geojson_id",
         technical: %{
           private: false,
-          orgId: organization.org_id,
+          orgId: organization.id,
           orgName: organization.name,
           dataName: "some_geojson",
           systemName: "#{organization.name}__some_geojson"

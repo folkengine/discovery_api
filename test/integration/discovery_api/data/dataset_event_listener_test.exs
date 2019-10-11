@@ -8,7 +8,7 @@ defmodule DiscoveryApi.Data.DatasetEventListenerTest do
   describe "handle_dataset/1" do
     test "indexes model for search" do
       organization = Helper.save_org(%{title: "my org title"})
-      dataset = TDG.create_dataset(%{id: "123", business: %{description: "my description"}, technical: %{orgId: organization.org_id}})
+      dataset = TDG.create_dataset(%{id: "123", business: %{description: "my description"}, technical: %{orgId: organization.id}})
 
       DiscoveryApi.Data.DatasetEventListener.handle_dataset(dataset)
 

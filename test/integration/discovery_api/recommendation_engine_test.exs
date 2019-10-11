@@ -24,7 +24,7 @@ defmodule DiscoveryApi.RecommendationEngineTest do
         }
       })
 
-    Helper.save_org(%{org_id: dataset_to_get_recommendations_for.technical.orgId})
+    Helper.save_org(%{id: dataset_to_get_recommendations_for.technical.orgId})
 
     dataset_with_wrong_types =
       TDG.create_dataset(%{

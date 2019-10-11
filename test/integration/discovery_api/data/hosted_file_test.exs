@@ -52,7 +52,7 @@ defmodule DiscoveryApi.Data.HostedFileTest do
         id: dataset_id,
         technical: %{
           systemName: system_name,
-          orgId: organization.org_id,
+          orgId: organization.id,
           sourceType: "host",
           dataName: dataset_name,
           orgName: organization.name
@@ -75,7 +75,7 @@ defmodule DiscoveryApi.Data.HostedFileTest do
         id: dataset_id,
         technical: %{
           systemName: system_name,
-          orgId: organization.org_id,
+          orgId: organization.id,
           sourceType: "host",
           dataName: dataset_name,
           orgName: organization.name
@@ -98,7 +98,7 @@ defmodule DiscoveryApi.Data.HostedFileTest do
         id: dataset_id,
         technical: %{
           systemName: system_name,
-          orgId: organization.org_id,
+          orgId: organization.id,
           sourceType: "host",
           dataName: dataset_name,
           orgName: organization.name
@@ -121,7 +121,7 @@ defmodule DiscoveryApi.Data.HostedFileTest do
         id: dataset_id,
         technical: %{
           systemName: system_name,
-          orgId: organization.org_id,
+          orgId: organization.id,
           sourceType: "host",
           dataName: dataset_name,
           orgName: organization.name

@@ -3,7 +3,7 @@ defmodule DiscoveryApiWeb.OrganizationView do
 
   def render("fetch_organization.json", %{org: %DiscoveryApi.Schemas.Organizations.Organization{} = org}) do
     %{
-      org_id: org.org_id,
+      id: org.id,
       name: org.name,
       title: org.title,
       description: org.description,

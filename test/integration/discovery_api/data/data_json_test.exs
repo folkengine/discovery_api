@@ -17,13 +17,13 @@ defmodule DiscoveryApi.Data.DataJsonTest do
   test "Properly formatted metadata is returned after consuming registry messages" do
     organization = Helper.save_org()
 
-    dataset_one = TDG.create_dataset(%{technical: %{orgId: organization.org_id, private: true}})
+    dataset_one = TDG.create_dataset(%{technical: %{orgId: organization.id, private: true}})
     Dataset.write(dataset_one)
 
-    dataset_two = TDG.create_dataset(%{technical: %{orgId: organization.org_id}})
+    dataset_two = TDG.create_dataset(%{technical: %{orgId: organization.id}})
     Dataset.write(dataset_two)
 
-    dataset_three = TDG.create_dataset(%{technical: %{orgId: organization.org_id}})
+    dataset_three = TDG.create_dataset(%{technical: %{orgId: organization.id}})
     Dataset.write(dataset_three)
 
     eventually(fn -> public_datasets_available?(2) end)
