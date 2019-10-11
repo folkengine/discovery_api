@@ -29,18 +29,6 @@ defmodule DiscoveryApiWeb.Utilities.AuthUtilsTest do
       assert false == result
       refute_called PaddleWrapper.authenticate(any(), any())
     end
-
-    test "should not make ldap call when found or has no ldap dn" do
-      allow PaddleWrapper.authenticate(any(), any()), return: :doesnt_matter
-      model = Helper.sample_model(%{private: true})
-      org_with_no_dn = Helper.sample_org(%{org_id: model.organization_id, ldap_dn: nil})
-      allow(Organizations.get_organization(any()), return: org_with_no_dn)
-
-      result = AuthUtils.has_access?(model, "bob")
-
-      assert false == result
-      refute_called PaddleWrapper.authenticate(any(), any())
-    end
   end
 
   describe "can_query/2" do

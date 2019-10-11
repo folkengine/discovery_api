@@ -35,23 +35,15 @@ defmodule DiscoveryApiWeb.Utilities.AuthUtils do
     Enum.all?(affected_models, &has_access?(&1, username))
   end
 
-  def has_access?(%Model{private: false} = _dataset, _username), do: true
+  def has_access?(%Model{private: false}, _username), do: true
+  def has_access?(%Model{private: true}, nil), do: false
 
-  def has_access?(%Model{private: true} = _dataset, nil), do: false
-
-  def has_access?(%Model{private: true, organization_id: organization_id}, username) do
-    case get_dn(organization_id) do
+  def has_access?(%Model{private: true, organization_id: organization_id}, username) when not is_nil(organization_id) do
+    case Organizations.get_organization(organization_id) do
       nil -> false
-      dn -> dn |> PaddleService.get_members() |> Enum.member?(username)
+      org -> org.ldap_dn |> PaddleService.get_members() |> Enum.member?(username)
     end
   end
 
   def has_access?(_base, _case), do: false
-
-  defp get_dn(organization_id) do
-    case Organizations.get_organization(organization_id) do
-      nil -> nil
-      org -> org.ldap_dn
-    end
-  end
 end

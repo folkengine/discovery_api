@@ -20,7 +20,7 @@ defmodule DiscoveryApi.Schemas.Organizations.Organization do
   def changeset(organization, changes) do
     organization
     |> cast(changes, [:org_id, :name, :title, :description, :homepage, :logo_url, :ldap_dn])
-    |> validate_required([:org_id, :name, :title])
+    |> validate_required([:org_id, :name, :title, :ldap_dn])
     |> unique_constraint(:org_id)
   end
 end

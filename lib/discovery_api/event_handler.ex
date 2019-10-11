@@ -1,7 +1,6 @@
 defmodule DiscoveryApi.EventHandler do
   @moduledoc "Event Handler for event stream"
   use Brook.Event.Handler
-  require Logger
   import SmartCity.Event, only: [organization_update: 0]
   alias SmartCity.Organization
   alias DiscoveryApi.Schemas.Organizations

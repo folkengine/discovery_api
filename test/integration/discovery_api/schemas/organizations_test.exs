@@ -7,6 +7,8 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
   alias DiscoveryApi.Schemas.Organizations
   alias DiscoveryApi.Schemas.Organizations.Organization
 
+  import Checkov
+
   @org_id "12343532"
 
   setup do
@@ -41,8 +43,8 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
     end
 
     test "updates an organization" do
-      assert {:ok, created} = Organizations.create_or_update(@org_id, %{name: "a", title: "b"})
-      assert {:ok, updated} = Organizations.create_or_update(@org_id, %{name: "c", title: "d"})
+      assert {:ok, created} = Organizations.create_or_update(@org_id, %{name: "a", title: "b", ldap_dn: "ldap"})
+      assert {:ok, updated} = Organizations.create_or_update(@org_id, %{name: "c", title: "d", ldap_dn: "ldap"})
 
       actual = Organizations.get_organization(@org_id)
       assert !is_nil(actual)
@@ -50,18 +52,22 @@ defmodule DiscoveryApi.Schemas.OrganizationsTest do
       assert "d" == actual.title
     end
 
-    test "returns an error when name is not provided" do
-      assert {:error, changeset} = Organizations.create_or_update(@org_id, %{title: "title"})
+    data_test "returns an error when required field: `#{required_field}` is not provided" do
+      organization_map =
+        %{name: "name", title: "title", ldap_dn: "ldap"}
+        |> Map.delete(required_field)
 
-      assert changeset.errors |> Keyword.has_key?(:name)
+      assert {:error, changeset} = Organizations.create_or_update(@org_id, organization_map)
+
+      assert changeset.errors |> Keyword.has_key?(required_field)
       assert is_nil(Organizations.get_organization(@org_id))
-    end
 
-    test "returns an error when title is not provided" do
-      assert {:error, changeset} = Organizations.create_or_update(@org_id, %{name: "name"})
-
-      assert changeset.errors |> Keyword.has_key?(:title)
-      assert is_nil(Organizations.get_organization(@org_id))
+      where([
+        [:required_field],
+        [:name],
+        [:title],
+        [:ldap_dn]
+      ])
     end
   end
 

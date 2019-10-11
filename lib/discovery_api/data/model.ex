@@ -168,19 +168,20 @@ defmodule DiscoveryApi.Data.Model do
       |> get_all_keys()
       |> Persistence.get_many_with_keys()
 
-    models
-    |> Enum.map(fn model ->
-      completeness = redis_kv_results["discovery-api:stats:#{model.id}"]
-      downloads = redis_kv_results["smart_registry:downloads:count:#{model.id}"]
-      queries = redis_kv_results["smart_registry:queries:count:#{model.id}"]
-      last_updated_date = redis_kv_results["forklift:last_insert_date:#{model.id}"]
+    Enum.map(models, fn model -> add_system_attributes_to_model(model, redis_kv_results) end)
+  end
 
-      model
-      |> Map.put(:completeness, completeness)
-      |> Map.put(:downloads, downloads)
-      |> Map.put(:queries, queries)
-      |> Map.put(:lastUpdatedDate, last_updated_date)
-    end)
+  defp add_system_attributes_to_model(model, redis_kv_results) do
+    completeness = redis_kv_results["discovery-api:stats:#{model.id}"]
+    downloads = redis_kv_results["smart_registry:downloads:count:#{model.id}"]
+    queries = redis_kv_results["smart_registry:queries:count:#{model.id}"]
+    last_updated_date = redis_kv_results["forklift:last_insert_date:#{model.id}"]
+
+    model
+    |> Map.put(:completeness, completeness)
+    |> Map.put(:downloads, downloads)
+    |> Map.put(:queries, queries)
+    |> Map.put(:lastUpdatedDate, last_updated_date)
   end
 
   defp get_all_keys(ids) do
