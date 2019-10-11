@@ -39,8 +39,6 @@ defmodule DiscoveryApi.Search.Storage do
   def handle_cast({:index, model}, state) do
     delete_all_for_model(model)
 
-    IO.inspect([model.title, model.description, model.organization], label: "handle cast")
-
     ([model.title, model.description, model.organization] ++ model.keywords)
     |> Enum.map(&String.downcase/1)
     |> Enum.map(&String.split/1)
@@ -79,6 +77,5 @@ defmodule DiscoveryApi.Search.Storage do
 
   defp save_word(word, id) do
     :ets.insert(__MODULE__, {word, id})
-    |> IO.inspect(label: "BAR")
   end
 end

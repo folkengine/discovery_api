@@ -6,7 +6,7 @@ defmodule DiscoveryApi.Data.DatasetEventListener do
   use SmartCity.Registry.MessageHandler
 
   alias DiscoveryApi.Data.{Mapper, Model, SystemNameCache}
-  alias SmartCity.Registry.{Dataset, Organization}
+  alias SmartCity.Registry.Dataset
   alias DiscoveryApiWeb.Plugs.ResponseCache
 
   def handle_dataset(%Dataset{} = dataset) do

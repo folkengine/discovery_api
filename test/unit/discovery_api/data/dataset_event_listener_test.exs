@@ -12,7 +12,6 @@ defmodule DiscoveryApi.Data.DatasetEventListenerTest do
       allow ResponseCache.invalidate(), return: :ok
       allow DiscoveryApi.Search.Storage.index(any()), return: :ok
       allow DiscoveryApi.RecommendationEngine.save(any()), return: :ok
-      allow Model.get(any()), return: :ok
 
       :ok
     end
@@ -23,6 +22,7 @@ defmodule DiscoveryApi.Data.DatasetEventListenerTest do
 
       allow(Organization.get(dataset.technical.orgId), return: {:ok, organization})
       allow(Model.save(any()), return: {:ok, :success})
+      allow Model.get(any()), return: :ok
 
       assert :ok == DatasetEventListener.handle_dataset(dataset)
     end
@@ -44,6 +44,7 @@ defmodule DiscoveryApi.Data.DatasetEventListenerTest do
 
       allow(Organization.get(dataset.technical.orgId), return: {:ok, organization})
       allow(Model.save(any()), return: {:ok, :success})
+      allow Model.get(any()), return: :ok
 
       assert :ok == DatasetEventListener.handle_dataset(dataset)
       assert_called ResponseCache.invalidate(), once()
@@ -67,6 +68,7 @@ defmodule DiscoveryApi.Data.DatasetEventListenerTest do
 
       allow Organization.get(organization.id), return: {:ok, organization}
       allow(Model.save(any()), return: {:ok, :success})
+      allow Model.get(any()), return: :ok
 
       DatasetEventListener.handle_dataset(dataset)
 
@@ -75,10 +77,9 @@ defmodule DiscoveryApi.Data.DatasetEventListenerTest do
 
     test "indexes model for search" do
       dataset = TDG.create_dataset(%{id: "123"})
-      organization = TDG.create_organization(%{id: dataset.technical.orgId})
-      allow Organization.get(organization.id), return: {:ok, organization}
       allow(Model.save(any()), return: {:ok, :success})
       expected_model = DiscoveryApi.Data.Mapper.to_data_model(dataset)
+      allow Model.get(any()), return: expected_model
 
       DatasetEventListener.handle_dataset(dataset)
 
@@ -90,6 +91,7 @@ defmodule DiscoveryApi.Data.DatasetEventListenerTest do
       organization = TDG.create_organization(%{id: dataset.technical.orgId})
       allow Organization.get(organization.id), return: {:ok, organization}
       allow(Model.save(any()), return: {:ok, :success})
+      allow Model.get(any()), return: :ok
 
       DatasetEventListener.handle_dataset(dataset)
 
