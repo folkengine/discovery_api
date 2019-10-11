@@ -31,7 +31,6 @@ defmodule DiscoveryApi.Data.ModelTest do
     assert actual.systemName == model.systemName
     assert actual.keywords == model.keywords
 
-    assert actual.organization == organization.title
     assert actual.organizationDetails.id == organization.id
     assert actual.organizationDetails.orgName == organization.name
     assert actual.organizationDetails.orgTitle == organization.title

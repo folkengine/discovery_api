@@ -11,21 +11,30 @@ defmodule DiscoveryApi.Search.DataModelFacinatorTest do
            Helper.sample_model(%{
              title: "Ben's head canon",
              organization: "OrgA",
+             organizationDetails: %{
+               orgTitle: "OrgA"
+             },
              keywords: ["my cool keywords", "another keywords"]
            }),
            Helper.sample_model(%{
              title: "Ben's Caniac Combo",
-             organization: "OrgA",
+             organizationDetails: %{
+               orgTitle: "OrgA"
+             },
              keywords: []
            }),
            Helper.sample_model(%{
              title: "Jarred's irrational attachment to natorism's",
-             organization: "OrgB",
+             organizationDetails: %{
+               orgTitle: "OrgB"
+             },
              keywords: ["my cool keywords"]
            }),
            Helper.sample_model(%{
              title: "hi its erin",
-             organization: "",
+             organizationDetails: %{
+               orgTitle: ""
+             },
              keywords: ["uncool keywords"]
            })
          ]

@@ -39,7 +39,7 @@ defmodule DiscoveryApi.Search.Storage do
   def handle_cast({:index, model}, state) do
     delete_all_for_model(model)
 
-    ([model.title, model.description, model.organization] ++ model.keywords)
+    ([model.title, model.description, model.organizationDetails.orgTitle] ++ model.keywords)
     |> Enum.map(&String.downcase/1)
     |> Enum.map(&String.split/1)
     |> List.flatten()

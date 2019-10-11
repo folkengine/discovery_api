@@ -13,8 +13,8 @@ defmodule DiscoveryApi.Search.DataModelFacinator do
 
   def extract_facets(models, _selected_facets) do
     %{
-      organization: unique_facets_with_count(models, :organization),
-      keywords: unique_facets_with_count(models, :keywords)
+      organization: unique_facets_with_count(models, [:organizationDetails, :orgTitle]),
+      keywords: unique_facets_with_count(models, [:keywords])
     }
   end
 
@@ -27,7 +27,7 @@ defmodule DiscoveryApi.Search.DataModelFacinator do
 
   defp extract_facet_values(models, facet_type) do
     models
-    |> Enum.map(&Map.get(&1, facet_type))
+    |> Enum.map(&get_in(&1, facet_type))
     |> List.flatten()
   end
 

@@ -35,7 +35,7 @@ defmodule DiscoveryApi.Search.StorageTest do
 
       Storage.index(model)
 
-      assert_words_indexed?(model.organization, model.id)
+      assert_words_indexed?(model.organizationDetails.orgTitle, model.id)
     end
 
     test "should store index keywords in ets table" do

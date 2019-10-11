@@ -27,7 +27,6 @@ defmodule DiscoveryApi.Data.Model do
     :license,
     :modifiedDate,
     :name,
-    :organization,
     :organization_id,
     :organizationDetails,
     :parentDataset,
@@ -137,20 +136,15 @@ defmodule DiscoveryApi.Data.Model do
   defp add_org_details(model) do
     organization = DiscoveryApi.Schemas.Organizations.get_organization(model.organization_id)
 
-    organization_information = %{
-      organization: organization.title,
-      organizationDetails: %{
-        id: organization.id,
-        orgName: organization.name,
-        orgTitle: organization.title,
-        description: organization.description,
-        logoUrl: organization.logo_url,
-        homepage: organization.homepage,
-        dn: organization.ldap_dn
-      }
-    }
-
-    Map.merge(model, organization_information)
+    Map.put(model, :organizationDetails, %{
+      id: organization.id,
+      orgName: organization.name,
+      orgTitle: organization.title,
+      description: organization.description,
+      logoUrl: organization.logo_url,
+      homepage: organization.homepage,
+      dn: organization.ldap_dn
+    })
   end
 
   defp add_system_attributes(nil), do: nil

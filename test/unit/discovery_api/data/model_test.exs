@@ -115,7 +115,6 @@ defmodule DiscoveryApi.Data.ModelTest do
     [x, y, z] = Stream.repeatedly(&:rand.uniform/0) |> Enum.take(3)
 
     organization_information = %{
-      organization: organization.title,
       organizationDetails: %{
         id: organization.id,
         orgName: organization.name,

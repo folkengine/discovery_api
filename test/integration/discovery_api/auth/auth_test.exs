@@ -33,7 +33,9 @@ defmodule DiscoveryApi.Auth.AuthTest do
     private_model_1 =
       Helper.sample_model(%{
         private: true,
-        organization: organization_1.title,
+        organizationDetails: %{
+          orgTitle: organization_1.title
+        },
         organization_id: organization_1.id,
         keywords: ["dataset", "facet1"]
       })
@@ -41,7 +43,9 @@ defmodule DiscoveryApi.Auth.AuthTest do
     private_model_2 =
       Helper.sample_model(%{
         private: true,
-        organization: organization_2.title,
+        organizationDetails: %{
+          orgTitle: organization_2.title
+        },
         organization_id: organization_2.id,
         keywords: ["dataset", "facet2"]
       })
@@ -49,7 +53,9 @@ defmodule DiscoveryApi.Auth.AuthTest do
     public_model =
       Helper.sample_model(%{
         private: false,
-        organization: organization_1.title,
+        organizationDetails: %{
+          orgTitle: organization_1.title
+        },
         organization_id: organization_1.id,
         keywords: ["dataset", "public_facet"]
       })
@@ -189,7 +195,7 @@ defmodule DiscoveryApi.Auth.AuthTest do
       assert Enum.find(facets[:keywords], fn facet -> facet[:name] == "public_facet" end)[:count] == 1
       assert Enum.find(facets[:keywords], fn facet -> facet[:name] == "facet2" end) == nil
       assert Enum.find(facets[:keywords], fn facet -> facet[:name] == "dataset" end)[:count] == 2
-      assert facets[:organization] == [%{count: 2, name: setup_map.private_model_1.organization}]
+      assert facets[:organization] == [%{count: 2, name: setup_map.private_model_1.organizationDetails.orgTitle}]
     end
 
     test "when the token is expired the response is a 404" do

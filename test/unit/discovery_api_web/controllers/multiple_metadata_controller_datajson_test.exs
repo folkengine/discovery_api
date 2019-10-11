@@ -12,7 +12,9 @@ defmodule DiscoveryApiWeb.MultipleMetadataController.DataJsonTest do
         title: "my title",
         description: "description",
         modifiedDate: "The Date",
-        organization: "Organization 1",
+        organizationDetails: %{
+          orgTitle: "Organization 1"
+        },
         contactName: "Bob Jones",
         contactEmail: "bjones@example.com",
         license: "http://openlicense.org",
@@ -68,7 +70,7 @@ defmodule DiscoveryApiWeb.MultipleMetadataController.DataJsonTest do
       assert model.description == result["description"]
       assert model.keywords == result["keyword"]
       assert model.modifiedDate == result["modified"]
-      assert model.organization == result["publisher"]["name"]
+      assert model.organizationDetails.orgTitle == result["publisher"]["name"]
       assert model.contactName == result["contactPoint"]["fn"]
       assert "mailto:" <> model.contactEmail == result["contactPoint"]["hasEmail"]
       assert model.homepage == result["landingPage"]
@@ -115,7 +117,9 @@ defmodule DiscoveryApiWeb.MultipleMetadataController.DataJsonTest do
         title: "my title",
         description: "description",
         modifiedDate: "The Date",
-        organization: "Organization 1",
+        organizationDetails: %{
+          orgTitle: "Organization 1"
+        },
         contactName: "Bob Jones",
         contactEmail: "bjones@example.com",
         license: "The License",

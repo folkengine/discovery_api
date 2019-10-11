@@ -29,5 +29,5 @@ defmodule DiscoveryApi.Schemas.Organizations do
     |> Repo.insert_or_update()
   end
 
-  def get_organization(id), do: Repo.get_by(Organization, id: id)
+  def get_organization(id), do: Repo.get(Organization, id)
 end

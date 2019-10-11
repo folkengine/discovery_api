@@ -53,7 +53,7 @@ defmodule DiscoveryApiWeb.MultipleMetadataView do
       "modified" => model.modifiedDate,
       "publisher" => %{
         "@type" => "org:Organization",
-        "name" => model.organization
+        "name" => model.organizationDetails.orgTitle
       },
       "contactPoint" => %{
         "@type" => "vcard:Contact",
