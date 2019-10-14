@@ -27,7 +27,7 @@ defmodule DiscoveryApi.Search.DataModelFacinator do
 
   defp extract_facet_values(models, facet_type) do
     models
-    |> Enum.map(fn model -> get_facet_value(model, facet_type) end)
+    |> Enum.map(&get_facet_value(&1, facet_type))
     |> List.flatten()
   end
 
