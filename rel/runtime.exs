@@ -1,5 +1,6 @@
 use Mix.Config
 
+redis_host = System.get_env("REDIS_HOST")
 kafka_brokers = System.get_env("KAFKA_BROKERS")
 
 endpoint =
@@ -95,5 +96,5 @@ config :discovery_api, :brook,
   handlers: [DiscoveryApi.EventHandler],
   storage: [
     module: Brook.Storage.Redis,
-    init_arg: [redix_args: [host: host], namespace: "discovery-api:view"]
+    init_arg: [redix_args: [host: redis_host], namespace: "discovery-api:view"]
   ]
