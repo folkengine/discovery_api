@@ -45,7 +45,7 @@ defmodule DiscoveryApi.Data.DataJsonTest do
     datasets =
       "http://localhost:4000/api/v1/data_json"
       |> get_map_from_url()
-      |> Map.get("dataset")
+      |> Map.get("dataset", [])
 
     if Enum.count(datasets) == count do
       Enum.all?(datasets, fn dataset -> dataset["accessLevel"] == "public" end)
