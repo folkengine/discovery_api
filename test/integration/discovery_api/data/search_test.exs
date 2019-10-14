@@ -16,7 +16,9 @@ defmodule DiscoveryApi.Data.SearchTest do
         private: false,
         title: "one",
         keywords: ["model", "one"],
-        organization: "one",
+        organizationDetails: %{
+          orgTitle: "one"
+        },
         description: "one"
       })
 
@@ -25,7 +27,9 @@ defmodule DiscoveryApi.Data.SearchTest do
         private: false,
         title: "two",
         keywords: ["model", "two"],
-        organization: "two",
+        organizationDetails: %{
+          orgTitle: "two"
+        },
         description: "two"
       })
 

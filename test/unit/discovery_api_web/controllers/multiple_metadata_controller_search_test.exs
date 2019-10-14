@@ -16,24 +16,6 @@ defmodule DiscoveryApiWeb.MultipleMetadataController.SearchTest do
   end
 
   describe "fetch dataset summaries" do
-    test "delete me", %{conn: conn} do
-      response_map = conn |> get("/api/v1/dataset/search", facets: %{organization: ["Richard-org-title"]}) |> json_response(200)
-      actual = get_in(response_map, ["results", Access.all(), "id"])
-      assert actual == ["Richard"]
-
-      # [
-      #   [facets: %{organization: ["Richard-org-title"]}],
-      #   ["results", Access.all(), "id"],
-      #   ["Richard"]
-      # ],
-    end
-
-    # test "delete me", %{conn: conn} do
-    #   response_map = conn |> get("/api/v1/dataset/search", sort: "name_asc") |> json_response(200)
-    #   actual = get_in(response_map, ["metadata", "facets", "organization", Access.all(), "name"])
-    #   assert actual == ["Paul-org-title", "Richard-org-title"]
-    # end
-
     data_test "request to search with #{inspect(params)}", %{conn: conn} do
       response_map = conn |> get("/api/v1/dataset/search", params) |> json_response(200)
       actual = get_in(response_map, selector)

@@ -27,21 +27,14 @@ defmodule DiscoveryApi.Search.DataModelFacinator do
 
   defp extract_facet_values(models, facet_type) do
     models
-    # |> IO.inspect(label: "models")
-    # |> Enum.map(&get_in(&1, facet_type))
     |> Enum.map(fn model -> get_facet_value(model, facet_type) end)
     |> List.flatten()
   end
 
   defp get_facet_value(model, facet_type) do
-    # IO.inspect(model, label: "Model")
-    # IO.inspect(facet_type, label: "Keys")
-
     model
     |> Map.from_struct()
     |> get_in(facet_type)
-
-    # Map.get(model, facet_type)
   end
 
   defp count_facet_occurrences(facet, acc) do

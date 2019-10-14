@@ -31,7 +31,12 @@ defmodule DiscoveryApi.Search.StorageTest do
     end
 
     test "should store index for organization in ets table" do
-      model = Helper.sample_model(%{organization: "Organizations are some amazing stuff"})
+      model =
+        Helper.sample_model(%{
+          organizationDetails: %{
+            orgTitle: "Organizations are some amazing stuff"
+          }
+        })
 
       Storage.index(model)
 
@@ -78,7 +83,14 @@ defmodule DiscoveryApi.Search.StorageTest do
     test "search should return all models that match search string" do
       model1 = Helper.sample_model(%{title: "this is the title"})
       model2 = Helper.sample_model(%{description: "title is the best"})
-      model3 = Helper.sample_model(%{organization: "fun stuff"})
+
+      model3 =
+        Helper.sample_model(%{
+          organizationDetails: %{
+            orgTitle: "fun stuff"
+          }
+        })
+
       model4 = Helper.sample_model(%{keywords: ["best"]})
 
       allow Model.get_all(any()), return: [model2]
