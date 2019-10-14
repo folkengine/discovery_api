@@ -8,17 +8,23 @@ defmodule DiscoveryApi.Search.DataModelFilteratorTest do
       models = [
         Helper.sample_model(%{
           title: "Ben's head canon",
-          organization: "OrgA",
+          organizationDetails: %{
+            orgTitle: "OrgA"
+          },
           keywords: ["BAR"]
         }),
         Helper.sample_model(%{
           title: "Ben's Caniac Combo",
-          organization: "OrgA",
+          organizationDetails: %{
+            orgTitle: "OrgA"
+          },
           keywords: ["BAZ"]
         }),
         Helper.sample_model(%{
           title: "Jarred's irrational attachment to natorism's",
-          organization: "OrgB",
+          organizationDetails: %{
+            orgTitle: "OrgB"
+          },
           keywords: ["BAZ", "BAR"]
         })
       ]
@@ -33,17 +39,23 @@ defmodule DiscoveryApi.Search.DataModelFilteratorTest do
       models = [
         Helper.sample_model(%{
           title: "Ben's head canon",
-          organization: "",
+          organizationDetails: %{
+            orgTitle: ""
+          },
           keywords: ["BAR"]
         }),
         Helper.sample_model(%{
           title: "Ben's Caniac Combo",
-          organization: "OrgA",
+          organizationDetails: %{
+            orgTitle: "OrgA"
+          },
           keywords: ["BAZ"]
         }),
         Helper.sample_model(%{
           title: "Jarred's irrational attachment to natorism's",
-          organization: "",
+          organizationDetails: %{
+            orgTitle: ""
+          },
           keywords: ["BAZ", "BAR"]
         })
       ]
@@ -59,17 +71,23 @@ defmodule DiscoveryApi.Search.DataModelFilteratorTest do
       models = [
         Helper.sample_model(%{
           title: "Ben's head canon",
-          organization: "",
+          organizationDetails: %{
+            orgTitle: ""
+          },
           keywords: ["BOR"]
         }),
         Helper.sample_model(%{
           title: "Ben's Caniac Combo",
-          organization: "OrgA",
+          organizationDetails: %{
+            orgTitle: "OrgA"
+          },
           keywords: ["BAZ"]
         }),
         Helper.sample_model(%{
           title: "Jarred's irrational attachment to natorism's",
-          organization: "",
+          organizationDetails: %{
+            orgTitle: ""
+          },
           keywords: ["BAZ", "BOO", "BOR"]
         })
       ]

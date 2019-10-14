@@ -10,7 +10,6 @@ defmodule DiscoveryApi.Search.DataModelFacinatorTest do
          models: [
            Helper.sample_model(%{
              title: "Ben's head canon",
-             organization: "OrgA",
              organizationDetails: %{
                orgTitle: "OrgA"
              },

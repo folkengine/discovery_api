@@ -29,6 +29,10 @@ defmodule DiscoveryApiWeb.MultipleMetadataController do
          filtered_by_source_type_results <- filter_by_source_type(filtered_result, api_accessible),
          authorized_results <- remove_unauthorized_models(conn, filtered_by_source_type_results),
          facets <- DataModelFacinator.extract_facets(authorized_results, filter_facets) do
+      # IO.inspect(search_result, label: "Search Result")
+      # IO.inspect(filtered_result, label: "Filtered Result")
+      # IO.inspect(authorized_results, label: "Auth Result")
+
       render(
         conn,
         :search_dataset_summaries,

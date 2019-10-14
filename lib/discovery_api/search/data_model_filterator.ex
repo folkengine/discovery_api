@@ -14,9 +14,16 @@ defmodule DiscoveryApi.Search.DataModelFilterator do
   end
 
   defp data_model_attributes_contain_all_facet_values?({facet_name, facet_values}, %Model{} = model) do
+    facet_path =
+      case facet_name do
+        :organization -> [:organizationDetails, :orgTitle]
+        other -> [other]
+      end
+
     attribute_values =
       model
-      |> Map.get(facet_name)
+      |> Map.from_struct()
+      |> get_in(facet_path)
       |> List.wrap()
       |> MapSet.new()
 
