@@ -61,7 +61,13 @@ defmodule DiscoveryApi.Data.HostedFileTest do
 
     Dataset.write(dataset)
 
-    eventually(fn -> download_and_checksum(organization.name, dataset.technical.dataName, "application/geo+json") == @expected_checksum end)
+    eventually(
+      fn ->
+        assert download_and_checksum(organization.name, dataset.technical.dataName, "application/geo+json") == @expected_checksum
+      end,
+      200,
+      5
+    )
   end
 
   @moduletag capture_log: true
@@ -84,7 +90,13 @@ defmodule DiscoveryApi.Data.HostedFileTest do
 
     Dataset.write(dataset)
 
-    eventually(fn -> download_and_checksum(organization.name, dataset.technical.dataName, "application/shapefile") == @expected_checksum end)
+    eventually(
+      fn ->
+        assert download_and_checksum(organization.name, dataset.technical.dataName, "application/shapefile") == @expected_checksum
+      end,
+      200,
+      5
+    )
   end
 
   @moduletag capture_log: true
@@ -107,7 +119,13 @@ defmodule DiscoveryApi.Data.HostedFileTest do
 
     Dataset.write(dataset)
 
-    eventually(fn -> download_and_checksum_with_format(organization.name, dataset.technical.dataName, "tgz") == @expected_checksum end)
+    eventually(
+      fn ->
+        assert download_and_checksum_with_format(organization.name, dataset.technical.dataName, "tgz") == @expected_checksum
+      end,
+      200,
+      5
+    )
   end
 
   @moduletag capture_log: true
@@ -130,14 +148,18 @@ defmodule DiscoveryApi.Data.HostedFileTest do
 
     Dataset.write(dataset)
 
-    eventually(fn ->
-      %{status_code: status_code, body: _body} =
-        "http://localhost:4000/api/v1/organization/#{organization.name}/dataset/#{dataset.technical.dataName}/download"
-        |> HTTPoison.get!([{"Accept", "audio/ATRAC3"}])
-        |> Map.from_struct()
+    eventually(
+      fn ->
+        %{status_code: status_code, body: _body} =
+          "http://localhost:4000/api/v1/organization/#{organization.name}/dataset/#{dataset.technical.dataName}/download"
+          |> HTTPoison.get!([{"Accept", "audio/ATRAC3"}])
+          |> Map.from_struct()
 
-      status_code == 406
-    end)
+        assert status_code == 406
+      end,
+      200,
+      5
+    )
   end
 
   defp download_and_checksum(org_name, dataset_name, accept_header) do

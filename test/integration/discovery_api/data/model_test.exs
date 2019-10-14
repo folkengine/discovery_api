@@ -50,6 +50,16 @@ defmodule DiscoveryApi.Data.ModelTest do
     assert Map.has_key?(actual, :queries)
   end
 
+  test "Model saves data to Redis even without an org" do
+    model = Helper.sample_model(%{organization_id: "I do not exist"})
+    Model.save(model)
+
+    actual = Model.get(model.id)
+
+    assert actual.id == model.id
+    assert actual.organizationDetails == %{}
+  end
+
   test "get latest should return a single date" do
     last_updated_date = DateTime.to_iso8601(DateTime.utc_now())
     model_id = "123"

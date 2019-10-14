@@ -20,10 +20,10 @@ defmodule DiscoveryApi.Application do
         DiscoveryApi.Search.Storage,
         DiscoveryApiWeb.Plugs.ResponseCache,
         redis(),
+        ecto_repo(),
         registry_pubsub(),
         supervisor(DiscoveryApiWeb.Endpoint, []),
         DiscoveryApi.Quantum.Scheduler,
-        ecto_repo(),
         {Brook, Application.get_env(:discovery_api, :brook) |> Keyword.put(:instance, instance())}
       ]
       |> List.flatten()

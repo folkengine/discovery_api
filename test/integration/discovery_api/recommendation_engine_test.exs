@@ -70,7 +70,7 @@ defmodule DiscoveryApi.RecommendationEngineTest do
 
     SmartCity.Registry.Dataset.write(dataset_to_get_recommendations_for)
 
-    eventually(fn -> DiscoveryApi.Data.Model.get(dataset_to_get_recommendations_for.id) != nil end)
+    eventually(fn -> assert DiscoveryApi.Data.Model.get(dataset_to_get_recommendations_for.id) != nil end, 100, 20)
 
     dataset_model = DiscoveryApi.Data.Model.get(dataset_to_get_recommendations_for.id)
 

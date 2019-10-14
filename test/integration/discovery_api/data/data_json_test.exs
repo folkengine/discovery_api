@@ -26,7 +26,7 @@ defmodule DiscoveryApi.Data.DataJsonTest do
     dataset_three = TDG.create_dataset(%{technical: %{orgId: organization.id}})
     Dataset.write(dataset_three)
 
-    eventually(fn -> public_datasets_available?(2) end)
+    eventually(fn -> public_datasets_available?(2) end, 1000, 20)
 
     actual = get_map_from_url("http://localhost:4000/api/v1/data_json")
     schema = get_schema_from_path("./test/integration/schemas/catalog.json")
@@ -47,11 +47,8 @@ defmodule DiscoveryApi.Data.DataJsonTest do
       |> get_map_from_url()
       |> Map.get("dataset", [])
 
-    if Enum.count(datasets) == count do
-      Enum.all?(datasets, fn dataset -> dataset["accessLevel"] == "public" end)
-    else
-      false
-    end
+    assert Enum.count(datasets) == count
+    assert Enum.all?(datasets, fn dataset -> dataset["accessLevel"] == "public" end)
   end
 
   defp get_map_from_url(url) do

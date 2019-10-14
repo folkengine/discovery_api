@@ -134,17 +134,21 @@ defmodule DiscoveryApi.Data.Model do
   defp add_org_details(nil), do: nil
 
   defp add_org_details(model) do
-    organization = DiscoveryApi.Schemas.Organizations.get_organization(model.organization_id)
+    case DiscoveryApi.Schemas.Organizations.get_organization(model.organization_id) do
+      nil ->
+        Map.put(model, :organizationDetails, %{})
 
-    Map.put(model, :organizationDetails, %{
-      id: organization.id,
-      orgName: organization.name,
-      orgTitle: organization.title,
-      description: organization.description,
-      logoUrl: organization.logo_url,
-      homepage: organization.homepage,
-      dn: organization.ldap_dn
-    })
+      organization ->
+        Map.put(model, :organizationDetails, %{
+          id: organization.id,
+          orgName: organization.name,
+          orgTitle: organization.title,
+          description: organization.description,
+          logoUrl: organization.logo_url,
+          homepage: organization.homepage,
+          dn: organization.ldap_dn
+        })
+    end
   end
 
   defp add_system_attributes(nil), do: nil

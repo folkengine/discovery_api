@@ -43,6 +43,14 @@ defmodule DiscoveryApi.Search.StorageTest do
       assert_words_indexed?(model.organizationDetails.orgTitle, model.id)
     end
 
+    test "should not error if org doesn't exist" do
+      model = Helper.sample_model(%{title: "This is the best", organizationDetails: %{}})
+
+      Storage.index(model)
+
+      assert_words_indexed?(model.title, model.id)
+    end
+
     test "should store index keywords in ets table" do
       model = Helper.sample_model(%{keywords: ["one", "two", "three", "highways"]})
 
@@ -52,7 +60,7 @@ defmodule DiscoveryApi.Search.StorageTest do
     end
 
     test "should remove all punctuation from words" do
-      model = Helper.sample_model(%{title: "Hello, world", description: "Jerks.", organization: "Hey-Ya"})
+      model = Helper.sample_model(%{title: "Hello, world", description: "Jerks.", organizationDetails: %{orgTitle: "Hey-Ya"}})
 
       Storage.index(model)
 
@@ -118,8 +126,12 @@ defmodule DiscoveryApi.Search.StorageTest do
   end
 
   defp assert_words_indexed?(words, id) when is_list(words) do
-    eventually(fn ->
-      Enum.all?(words, fn word -> {word, id} in :ets.lookup(DiscoveryApi.Search.Storage, word) end)
-    end)
+    eventually(
+      fn ->
+        assert Enum.all?(words, fn word -> {word, id} in :ets.lookup(DiscoveryApi.Search.Storage, word) end)
+      end,
+      200,
+      20
+    )
   end
 end
