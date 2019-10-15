@@ -24,6 +24,8 @@ defmodule DiscoveryApi.Data.DatasetEventListener do
       {:error, reason} ->
         Logger.error("Unable to process message `#{inspect(dataset)}` : ERROR: #{inspect(reason)}")
     end
+  rescue
+    error in Postgrex.Error -> Logger.error("Unable to process message `#{inspect(dataset)}` : ERROR: #{inspect(error.message)}")
   end
 
   defp save_dataset_to_recommendation_engine(%Dataset{technical: %{private: false, schema: schema}} = dataset) when length(schema) > 0 do

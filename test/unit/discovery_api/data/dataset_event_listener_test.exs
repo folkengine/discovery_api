@@ -62,6 +62,20 @@ defmodule DiscoveryApi.Data.DatasetEventListenerTest do
       assert :ok == DatasetEventListener.handle_dataset(dataset)
     end
 
+    @tag capture_log: true
+    test "should return :ok and log when model get fails" do
+      dataset = TDG.create_dataset(%{id: "123"})
+
+      allow(Model.get(any()),
+        exec: fn _ -> raise %Postgrex.Error{message: "ERROR 42P01 (undefined_table) relation organizations does not exist"} end
+      )
+
+      allow(SystemNameCache.put(any()), return: {:ok, :cached})
+      allow(Model.save(any()), return: {:ok, :success})
+
+      assert :ok == DatasetEventListener.handle_dataset(dataset)
+    end
+
     test "creates orgName/dataName mapping to dataset_id" do
       dataset = TDG.create_dataset(%{id: "123", technical: %{orgName: "orgName", dataName: "dataName"}})
       organization = TDG.create_organization(%{id: dataset.technical.orgId})
