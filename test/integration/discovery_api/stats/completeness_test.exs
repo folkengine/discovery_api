@@ -149,6 +149,7 @@ defmodule DiscoveryApi.Stats.CompletenessTest do
     |> Map.from_struct()
     |> Map.get(:body)
     |> Jason.decode!()
+    |> Map.get("completeness", %{})
   end
 
   defp get_dataset_completeness_from_stats_endpoint(dataset_id) do
