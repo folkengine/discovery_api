@@ -39,12 +39,12 @@ defmodule DiscoveryApi.Search.Storage do
   def handle_cast({:index, model}, state) do
     delete_all_for_model(model)
 
-    orgTitle =
+    org_title =
       model
       |> Map.from_struct()
       |> get_in([:organizationDetails, :orgTitle])
 
-    ([model.title, model.description, orgTitle] ++ model.keywords)
+    ([model.title, model.description, org_title] ++ model.keywords)
     |> Enum.reject(&is_nil(&1))
     |> Enum.map(&String.downcase/1)
     |> Enum.map(&String.split/1)
