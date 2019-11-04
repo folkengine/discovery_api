@@ -9,6 +9,7 @@ defmodule DiscoveryApi.Schemas.Users.User do
   schema "users" do
     field(:subject_id, :string)
     field(:email, :string)
+    field(:public_id, Ecto.UUID)
     has_many(:visualizations, Visualization, foreign_key: :owner_id)
 
     timestamps()
