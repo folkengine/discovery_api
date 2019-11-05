@@ -6,10 +6,11 @@ defmodule DiscoveryApi.Schemas.Users.User do
   import Ecto.Changeset
   alias DiscoveryApi.Schemas.Visualizations.Visualization
 
+  @primary_key {:id, Ecto.UUID, autogenerate: true}
+
   schema "users" do
     field(:subject_id, :string)
     field(:email, :string)
-    field(:public_id, Ecto.UUID)
     has_many(:visualizations, Visualization, foreign_key: :owner_id)
 
     timestamps()
