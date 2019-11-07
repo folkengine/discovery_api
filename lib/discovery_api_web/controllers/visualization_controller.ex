@@ -4,7 +4,6 @@ defmodule DiscoveryApiWeb.VisualizationController do
 
   alias DiscoveryApi.Schemas.Users
   alias DiscoveryApi.Schemas.Visualizations
-  alias DiscoveryApi.Schemas.Visualizations.Visualization
 
   plug(:accepts, DiscoveryApiWeb.VisualizationView.accepted_formats())
 

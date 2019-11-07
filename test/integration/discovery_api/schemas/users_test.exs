@@ -6,6 +6,7 @@ defmodule DiscoveryApi.Schemas.UsersTest do
   alias DiscoveryApi.Repo
   alias DiscoveryApi.Schemas.{Generators, Users}
   alias DiscoveryApi.Schemas.Users.User
+  alias DiscoveryApi.Schemas.Organizations.Organization
 
   describe "get/1" do
     test "given an existing user, it returns an :ok tuple with it" do
@@ -67,6 +68,18 @@ defmodule DiscoveryApi.Schemas.UsersTest do
       assert {:error, changeset} = Users.create(%{subject_id: subject_id, email: "sally@e.mail"})
 
       assert changeset.errors |> Keyword.has_key?(:subject_id)
+    end
+  end
+
+  describe "associate_with_organization/2" do
+    test "succeeds when user and organization exist" do
+      {:ok, user} = Repo.insert(%User{subject_id: "predicate", email: "bob@e.mail"})
+      {:ok, organization} = Repo.insert(%Organization{id: "org-id", name: "my-org", title: "pretty sweet org", ldap_dn: "my-dn"})
+
+      assert {:ok, saved} = Users.associate_with_organization(user.id, organization.id)
+
+      assert %User{organizations: [organization]} = saved
+      assert %User{organizations: [organization]} = Repo.get(User, user.id) |> Repo.preload(:organizations)
     end
   end
 end
