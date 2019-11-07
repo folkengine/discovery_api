@@ -43,6 +43,5 @@ defmodule DiscoveryApi.Schemas.Users do
     else
       error -> error
     end
-
   end
 end
