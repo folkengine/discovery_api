@@ -74,7 +74,7 @@ defmodule DiscoveryApi.Schemas.VisualizationsTest do
       owner = %User{subject_id: "you|them", email: "bob@example.com"}
 
       assert {:ok, _} = Visualizations.create(%{query: query, title: title, owner: owner})
-      assert {:ok, _} = Users.get_user("you|them")
+      assert {:ok, _} = Users.get_user("you|them", :subject_id)
     end
   end
 
