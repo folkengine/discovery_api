@@ -5,7 +5,6 @@ defmodule DiscoveryApi.Schemas.Users do
   alias DiscoveryApi.Repo
   alias DiscoveryApi.Schemas.Users.User
   alias DiscoveryApi.Schemas.Organizations
-  alias DiscoveryApi.Schemas.Organizations.Organization
 
   def list_users do
     Repo.all(User)
@@ -30,6 +29,13 @@ defmodule DiscoveryApi.Schemas.Users do
     case Repo.get_by(User, [{field, id}]) do
       nil -> {:error, "User with #{field} #{id} does not exist."}
       user -> {:ok, user}
+    end
+  end
+
+  def get_user_with_organizations(id, field \\ :id) do
+    case get_user(id, field) do
+      {:ok, user} -> {:ok, user |> Repo.preload(:organizations)}
+      error -> error
     end
   end
 
