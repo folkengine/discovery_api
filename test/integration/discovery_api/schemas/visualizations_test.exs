@@ -61,7 +61,7 @@ defmodule DiscoveryApi.Schemas.VisualizationsTest do
     test "given an invalid owner, it fails to create a visualization" do
       query = "select * from turtles"
       title = "My first visualization"
-      owner = %User{id: 100, subject_id: "you|them"}
+      owner = %User{id: Ecto.UUID.generate(), subject_id: "you|them"}
 
       assert_raise Postgrex.Error, fn ->
         Visualizations.create_visualization(%{query: query, title: title, owner: owner})
@@ -73,8 +73,8 @@ defmodule DiscoveryApi.Schemas.VisualizationsTest do
       title = "My first visualization"
       owner = %User{subject_id: "you|them", email: "bob@example.com"}
 
-      assert {:ok, _} = Users.get_user("you|them", :subject_id)
       assert {:ok, _} = Visualizations.create_visualization(%{query: query, title: title, owner: owner})
+      assert {:ok, _} = Users.get_user("you|them", :subject_id)
     end
   end
 
