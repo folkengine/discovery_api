@@ -23,10 +23,9 @@ defmodule DiscoveryApi.UserOrganizationAssociationTest do
 
     Brook.Event.send(DiscoveryApi.instance(), user_organization_associate(), :test, association_event)
 
-    # TODO: eventually needed?  Try upgrading Brook
     eventually(
       fn ->
-        assert {:ok, %User{organizations: [associated_org]}} = Users.get_user_with_organizations(user.id) |> IO.inspect(label: "WAT")
+        assert {:ok, %User{organizations: [associated_org]}} = Users.get_user_with_organizations(user.id)
         assert organization.id == associated_org.id
       end,
       500,
