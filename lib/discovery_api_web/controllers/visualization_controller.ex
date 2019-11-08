@@ -5,14 +5,14 @@ defmodule DiscoveryApiWeb.VisualizationController do
   alias DiscoveryApi.Schemas.Users
   alias DiscoveryApi.Schemas.Visualizations
   alias DiscoveryApiWeb.Utilities.AuthUtils
+  alias DiscoveryApiWeb.Utilities.EctoAccessUtils
 
   plug(:accepts, DiscoveryApiWeb.VisualizationView.accepted_formats())
 
   def show(conn, %{"id" => id}) do
     with {:ok, %{query: query} = visualization} <- Visualizations.get_visualization(id),
-    user <- Map.get(conn.assigns, :current_user, :anonymous_user) |> IO.inspect(),
-         true <- AuthUtils.authorized_to_query?(query, user) do
-
+         user <- Map.get(conn.assigns, :current_user, :anonymous_user) |> IO.inspect(),
+         true <- AuthUtils.authorized_to_query?(query, user, EctoAccessUtils) do
       render(conn, :visualization, %{visualization: visualization})
     else
       {:error, _} -> render_error(conn, 404, "Not Found")
