@@ -2,6 +2,8 @@ use Mix.Config
 
 redis_host = System.get_env("REDIS_HOST")
 redis_password = System.get_env("REDIS_PASSWORD")
+redix_args = Keyword.new()
+
 kafka_brokers = System.get_env("KAFKA_BROKERS")
 
 endpoint =
