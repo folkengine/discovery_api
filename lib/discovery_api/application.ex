@@ -36,7 +36,7 @@ defmodule DiscoveryApi.Application do
   end
 
   defp registry_pubsub() do
-    Application.get_env(:smart_city_registry, :redis)
+    Application.get_env(:redix, :args)
     |> case do
       nil -> []
       _ -> {SmartCity.Registry.Subscriber, [message_handler: DiscoveryApi.Data.DatasetEventListener]}
@@ -44,10 +44,10 @@ defmodule DiscoveryApi.Application do
   end
 
   defp redis do
-    Application.get_env(:discovery_api, :redis)
+    Application.get_env(:redix, :args)
     |> case do
       nil -> []
-      redix_args -> {Redix, redix_args}
+      args -> {Redix, Keyword.put(args, :name, :redix)}
     end
   end
 
