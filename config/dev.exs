@@ -26,12 +26,10 @@ config :phoenix, :stacktrace_depth, 20
 config :mix_test_watch,
   clear: true
 
-config :redix,
-  host: "localhost"
-
 config :discovery_api,
   divo: "test/integration/docker-compose.yaml",
-  divo_wait: [dwell: 1000, max_tries: 20]
+  divo_wait: [dwell: 1000, max_tries: 20],
+  redix_args: [host: "localhost"]
 
 config :paddle, Paddle,
   host: System.get_env("LDAP_HOST"),

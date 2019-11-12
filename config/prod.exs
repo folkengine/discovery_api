@@ -9,14 +9,14 @@ config :discovery_api, DiscoveryApiWeb.Endpoint,
   # Probably not necc
   version: Application.spec(:discovery_api, :vsn),
   check_origin: false
+	
 
 # Do not print debug messages in production
 config :logger, level: :info
 
-config :redix,
-  host: "localhost"
-
-config :discovery_api, ecto_repos: [DiscoveryApi.Repo]
+config :discovery_api,
+ecto_repos: [DiscoveryApi.Repo],
+redix_args: [host: "localhost"]
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.

@@ -1,6 +1,7 @@
 use Mix.Config
 aws_region = "us-west-2"
 host = "localhost"
+redix_args = [host: host]
 endpoints = [{to_charlist(host), 9092}]
 
 config :discovery_api, DiscoveryApiWeb.Endpoint, url: [host: "data.integrationtests.example.com", port: 80]
@@ -12,7 +13,8 @@ config :discovery_api,
   ldap_user: [cn: "admin"],
   ldap_pass: "admin",
   hosted_bucket: "kdp-cloud-storage",
-  hosted_region: aws_region
+  hosted_region: aws_region,
+  redis: redix_args
 
 config :discovery_api,
   jwks_endpoint: "https://smartcolumbusos-demo.auth0.com/.well-known/jwks.json",
@@ -21,12 +23,7 @@ config :discovery_api,
 config :discovery_api, DiscoveryApi.Auth.Auth0.Guardian, issuer: "https://smartcolumbusos-demo.auth0.com/"
 
 config :smart_city_registry,
-  redis: [
-    host: host
-  ]
-
-config :redix,
-  host: host
+  redis: redix_args
 
 config :phoenix,
   serve_endpoints: true,
