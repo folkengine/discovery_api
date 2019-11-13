@@ -23,9 +23,6 @@ config :discovery_api, DiscoveryApi.Auth.Auth0.Guardian, issuer: "https://smartc
 config :redix,
   args: [host: host]
 
-config :redix,
-  args: redix_args
-
 config :phoenix,
   serve_endpoints: true,
   persistent: true
