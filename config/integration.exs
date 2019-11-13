@@ -21,7 +21,7 @@ config :discovery_api,
 config :discovery_api, DiscoveryApi.Auth.Auth0.Guardian, issuer: "https://smartcolumbusos-demo.auth0.com/"
 
 config :redix,
-  args: [host: host],
+  args: [host: host]
 
 config :phoenix,
   serve_endpoints: true,
