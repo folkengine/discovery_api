@@ -23,6 +23,9 @@ config :discovery_api, DiscoveryApi.Auth.Auth0.Guardian, issuer: "https://smartc
 config :redix,
   args: [host: host]
 
+config :redix,
+  args: redix_args
+
 config :phoenix,
   serve_endpoints: true,
   persistent: true
@@ -71,5 +74,5 @@ config :discovery_api, :brook,
   handlers: [DiscoveryApi.EventHandler],
   storage: [
     module: Brook.Storage.Redis,
-    init_arg: [redix_args: [host: host], namespace: "discovery-api:view"]
+    init_arg: [redix_args: redix_args, namespace: "discovery-api:view"]
   ]

@@ -47,7 +47,7 @@ defmodule DiscoveryApi.Application do
     Application.get_env(:redix, :args)
     |> case do
       nil -> []
-      args -> {Redix, Keyword.put(args, :name, :redix)}
+      redix_args -> {Redix, Keyword.put(redix_args, :name, :redix)}
     end
   end
 
