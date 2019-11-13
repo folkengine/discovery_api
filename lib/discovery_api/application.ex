@@ -39,15 +39,15 @@ defmodule DiscoveryApi.Application do
     Application.get_env(:smart_city_registry, :redis)
     |> case do
       nil -> []
-      redix_args -> {SmartCity.Registry.Subscriber, [message_handler: DiscoveryApi.Data.DatasetEventListener]}
+      _ -> {SmartCity.Registry.Subscriber, [message_handler: DiscoveryApi.Data.DatasetEventListener]}
     end
   end
 
   defp redis do
-    Application.get_env(:discovery_api, :redis)
+    Application.get_env(:redix, :args)
     |> case do
       nil -> []
-      redix_args -> {Redix, redix_args}
+      redix_args -> {Redix, Keyword.put(redix_args, :name, :redix)}
     end
   end
 

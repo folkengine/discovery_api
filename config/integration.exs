@@ -13,8 +13,7 @@ config :discovery_api,
   ldap_user: [cn: "admin"],
   ldap_pass: "admin",
   hosted_bucket: "kdp-cloud-storage",
-  hosted_region: aws_region,
-  redis: redix_args
+  hosted_region: aws_region
 
 config :discovery_api,
   jwks_endpoint: "https://smartcolumbusos-demo.auth0.com/.well-known/jwks.json",
@@ -24,6 +23,9 @@ config :discovery_api, DiscoveryApi.Auth.Auth0.Guardian, issuer: "https://smartc
 
 config :smart_city_registry,
   redis: redix_args
+
+config :redix,
+  args: redix_args
 
 config :phoenix,
   serve_endpoints: true,
@@ -73,5 +75,5 @@ config :discovery_api, :brook,
   handlers: [DiscoveryApi.EventHandler],
   storage: [
     module: Brook.Storage.Redis,
-    init_arg: [redix_args: [host: host], namespace: "discovery-api:view"]
+    init_arg: [redix_args: redix_args, namespace: "discovery-api:view"]
   ]

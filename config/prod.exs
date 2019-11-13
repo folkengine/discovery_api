@@ -14,8 +14,10 @@ config :discovery_api, DiscoveryApiWeb.Endpoint,
 config :logger, level: :info
 
 config :discovery_api,
-  ecto_repos: [DiscoveryApi.Repo],
-  redix_args: [host: "localhost"]
+  ecto_repos: [DiscoveryApi.Repo]
+
+config :redix,
+  args: [host: "localhost"]
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
